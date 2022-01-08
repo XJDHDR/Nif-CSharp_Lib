@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nif-CSharp", "Nif-CSharp\Nif-CSharp.csproj", "{F31BC74D-07F3-4F5A-A4AD-120D1D161FD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonCode", "CommonCode\CommonCode.csproj", "{69759190-90F1-4E1D-9D03-7A0F06B35A66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nif-UnityGO", "Nif-UnityGO\Nif-UnityGO.csproj", "{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F31BC74D-07F3-4F5A-A4AD-120D1D161FD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31BC74D-07F3-4F5A-A4AD-120D1D161FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31BC74D-07F3-4F5A-A4AD-120D1D161FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31BC74D-07F3-4F5A-A4AD-120D1D161FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69759190-90F1-4E1D-9D03-7A0F06B35A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69759190-90F1-4E1D-9D03-7A0F06B35A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69759190-90F1-4E1D-9D03-7A0F06B35A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69759190-90F1-4E1D-9D03-7A0F06B35A66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
