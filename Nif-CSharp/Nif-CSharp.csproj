@@ -6,10 +6,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>8</LangVersion>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CommonCode\CommonCode.csproj" />
+      <Compile Include="..\CommonCode\BytesToString.cs">
+        <Link>CommonCodeLinks\BytesToString.cs</Link>
+      </Compile>
+      <Compile Include="..\CommonCode\ComplexVersionChecks.cs">
+        <Link>CommonCodeLinks\ComplexVersionChecks.cs</Link>
+      </Compile>
+      <Compile Include="..\CommonCode\SkipBytes.cs">
+        <Link>CommonCodeLinks\SkipBytes.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>
