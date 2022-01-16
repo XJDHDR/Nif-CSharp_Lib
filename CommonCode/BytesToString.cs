@@ -10,80 +10,121 @@ using System.Text;
 
 namespace CommonCode
 {
+	/// <summary>
+	/// Struct holding methods used to convert sequences of bytes into strings.
+	/// </summary>
 	internal struct BytesToString
 	{
-		internal static bool UnprefixedByteTerminatedString(BinaryReader _NifRawDataStream, byte _TerminatingByte, out string _ReadString)
+		/// <summary>
+		/// Used to get a string from a sequence of bytes that doesn't specify the string's length but is terminated
+		/// by a specific character. Can read a maximum of 1000 characters before it errors out.
+		/// </summary>
+		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_TerminatingByte_">Supply the terminating byte value that is supposed to terminate the string.</param>
+		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
+		/// <returns>True if the terminating byte was found within 1000 bytes of start. False otherwise.</returns>
+		internal static bool _UnprefixedByteTerminatedString(BinaryReader _NifRawDataStream_, byte _TerminatingByte_, out string _ReadString_)
 		{
 			// Read bytes until either the specified character is found or 1000 bytes are read;
-			StringBuilder _stringBuilder = new StringBuilder(32, 1002);
-			ushort _loopIterations = 0;
-			byte[] _currentByte = new byte[1];
+			long _startPos_ = _NifRawDataStream_.BaseStream.Position;
+			StringBuilder _stringBuilder_ = new StringBuilder(32, 1002);
+			ushort _loopIterations_ = 0;
+			byte[] _currentByte_ = new byte[1];
 
 			while (true)
 			{
-				++_loopIterations;
+				++_loopIterations_;
 
-				_currentByte[0] = _NifRawDataStream.ReadByte();
-				if (_currentByte[0] == _TerminatingByte)
+				_currentByte_[0] = _NifRawDataStream_.ReadByte();
+				if (_currentByte_[0] == _TerminatingByte_)
 				{
 					break;
 				}
 
-				_stringBuilder.Append(Encoding.UTF8.GetString(_currentByte));
+				_stringBuilder_.Append(Encoding.UTF8.GetString(_currentByte_));
 
-				if (_loopIterations > 1000)
+				if (_loopIterations_ > 1000)
 				{
-					_ReadString = $"Error: Did not find a byte with the value \"{_TerminatingByte}\" after reading 1000 bytes.";
+					_ReadString_ = $"Error: Did not find a byte with the value \"{_TerminatingByte_}\" after reading 1000 bytes " +
+					               $"starting at {_startPos_}.";
 					return false;
 				}
 			}
 
-			_ReadString = _stringBuilder.ToString();
+			_ReadString_ = _stringBuilder_.ToString();
 			return true;
 		}
 
-		internal static bool _ReadExportString(BinaryReader _NifRawDataStream, out string _ReadString)
+		/// <summary>
+		/// Used to read a sequences of bytes identified in NIF xml as an "ExportString".
+		/// </summary>
+		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
+		/// <returns>True if the Export String was successfully read. False otherwise.</returns>
+		internal static bool _ReadExportString(BinaryReader _NifRawDataStream_, out string _ReadString_)
 		{
-			return _ReadLengthPrefixedStringWithTerminatingByte(_NifRawDataStream, 0x00, out _ReadString);
+			return _ReadLengthPrefixedStringWithTerminatingByte(_NifRawDataStream_, 0x00, out _ReadString_);
 		}
 
-		internal static bool _ReadLengthPrefixedStringWithTerminatingByte(BinaryReader _NifRawDataStream,
-			byte _TerminatingByte, out string _ReadString)
+		/// <summary>
+		/// A generic method used to read a string that is both prefixed with it's length (in UInt8 format) and
+		/// has it's last character be a specified terminating character (which is included in the length value).
+		/// </summary>
+		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_TerminatingByte_">Supply the terminating byte value that is supposed to terminate the string.</param>
+		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
+		/// <returns>True if the last byte in the string was the terminating byte. False otherwise.</returns>
+		internal static bool _ReadLengthPrefixedStringWithTerminatingByte(BinaryReader _NifRawDataStream_,
+			byte _TerminatingByte_, out string _ReadString_)
 		{
-			byte _DataUnitLength = (byte)(_NifRawDataStream.ReadByte() - 1);
+			byte _dataUnitLength_ = (byte)(_NifRawDataStream_.ReadByte() - 1);
 
-			byte[] _stringBytes = _NifRawDataStream.ReadBytes(_DataUnitLength);
+			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes(_dataUnitLength_);
 
-			byte _LastByteInDataUnit = _NifRawDataStream.ReadByte();
-			if (_LastByteInDataUnit != _TerminatingByte)
+			byte _lastByteInDataUnit_ = _NifRawDataStream_.ReadByte();
+			if (_lastByteInDataUnit_ != _TerminatingByte_)
 			{
-				_ReadString = $"Error: Did not find a byte with the value \"{_TerminatingByte}\" at position " +
-				          $"{_NifRawDataStream.BaseStream.Position}. {_LastByteInDataUnit} was read instead.";
+				_ReadString_ = $"Error: Did not find a byte with the value \"{_TerminatingByte_}\" at position " +
+				          $"{_NifRawDataStream_.BaseStream.Position}. {_lastByteInDataUnit_} was read instead.";
 				return false;
 			}
 
-			_ReadString = Encoding.UTF8.GetString(_stringBytes);
+			_ReadString_ = Encoding.UTF8.GetString(_stringBytes_);
 			return true;
 		}
 
-		internal static bool _ReadSizedString(BinaryReader _NifRawDataStream, out string _ReadString)
+		/// <summary>
+		/// Used to read a sequences of bytes identified in NIF xml as an "SizedString". Limited to reading a maximum
+		/// string length of 2147483647, as an array can only use an Int32 to define it's indexes whereas these strings
+		/// use a UInt32 to designate length.
+		/// </summary>
+		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
+		/// <returns>True if the string's indicated length is less than 2147483647. False otherwise.</returns>
+		internal static bool _ReadSizedString(BinaryReader _NifRawDataStream_, out string _ReadString_)
 		{
-			int _DataUnitLength = _NifRawDataStream.ReadInt32();
-			if (_DataUnitLength < 0)
+			int _dataUnitLength_ = _NifRawDataStream_.ReadInt32();
+			if (_dataUnitLength_ < 0)
 			{
-				_ReadString = $"Error while reading a SizedString: String length is more than {int.MaxValue}, which is not supported.";
+				_ReadString_ = $"Error while reading a SizedString at byte {_NifRawDataStream_.BaseStream.Position}: " +
+				               $"String length is more than {int.MaxValue}, which is not supported.";
 				return false;
 			}
-			byte[] _stringBytes = _NifRawDataStream.ReadBytes(_DataUnitLength);
-			_ReadString = Encoding.UTF8.GetString(_stringBytes);
+			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes(_dataUnitLength_);
+			_ReadString_ = Encoding.UTF8.GetString(_stringBytes_);
 			return true;
 		}
 
-		internal static string _ReadSizedString16(BinaryReader _NifRawDataStream)
+		/// <summary>
+		/// Used to read a sequences of bytes identified in NIF xml as an "SizedString16".
+		/// </summary>
+		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <returns>The string that was read from the data.</returns>
+		internal static string _ReadSizedString16(BinaryReader _NifRawDataStream_)
 		{
-			byte _DataUnitLength = _NifRawDataStream.ReadByte();
-			byte[] _stringBytes = _NifRawDataStream.ReadBytes(_DataUnitLength);
-			return Encoding.UTF8.GetString(_stringBytes);
+			byte _dataUnitLength_ = _NifRawDataStream_.ReadByte();
+			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes(_dataUnitLength_);
+			return Encoding.UTF8.GetString(_stringBytes_);
 		}
 	}
 }

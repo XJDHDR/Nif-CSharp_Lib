@@ -5,9 +5,8 @@
 // NIFxml project: https://github.com/niftools/nifxml/
 //
 
+
 // ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedType.Global
 
 
 using Nif_CSharp.DataReaders.Header;
@@ -16,64 +15,63 @@ namespace Nif_CSharp
 {
 	public static class NifCSharp
 	{
-		public static bool ReadEntireNif(string PathToNif, long StreamStartPos, string NifIdentifier, ref string Error)
+		public static bool ReadEntireNif(string _PathToNif_, long _StreamStartPos_, string _NifIdentifier_, ref string _Error_)
 		{
-			FileStream? _fileStream = null;
+			FileStream? _fileStream_ = null;
 			try
 			{
-				_fileStream = File.Open(PathToNif, FileMode.Open, FileAccess.Read);
-				_fileStream.Position = StreamStartPos;
+				_fileStream_ = File.Open(_PathToNif_, FileMode.Open, FileAccess.Read);
+				_fileStream_.Position = _StreamStartPos_;
 			}
-			catch (Exception e)
+			catch (Exception _e_)
 			{
-				_fileStream?.DisposeAsync();
-				Error = e.ToString();
+				_fileStream_?.DisposeAsync();
+				_Error_ = _e_.ToString();
 				return false;
 			}
 
-			bool _readEntireNifReturn = ReadEntireNif(_fileStream, NifIdentifier, ref Error, true);
-			_fileStream.DisposeAsync();
-			return _readEntireNifReturn;
+			bool _readEntireNifReturn_ = ReadEntireNif(_fileStream_, _NifIdentifier_, ref _Error_, true);
+			_fileStream_.DisposeAsync();
+			return _readEntireNifReturn_;
 		}
 
-		public static bool ReadEntireNif(Stream NifDataStream, string NifIdentifier, ref string Error, bool ShouldBuffer = false)
+		public static bool ReadEntireNif(Stream _NifDataStream_, string _NifIdentifier_, ref string _Error_, bool _ShouldBuffer_ = false)
 		{
-			BufferedStream _bufferedStream;
-			BinaryReader _binaryReader;
+			BinaryReader _binaryReader_;
 			try
 			{
-				if (ShouldBuffer)
+				if (_ShouldBuffer_)
 				{
-					_bufferedStream = new BufferedStream(NifDataStream, 16384);
+					BufferedStream _bufferedStream_ = new BufferedStream(_NifDataStream_, 16384);
 
-					_binaryReader = new BinaryReader(_bufferedStream);
+					_binaryReader_ = new BinaryReader(_bufferedStream_);
 				}
 				else
 				{
-					_binaryReader = new BinaryReader(NifDataStream);
+					_binaryReader_ = new BinaryReader(_NifDataStream_);
 				}
 			}
-			catch (Exception e)
+			catch (Exception _e_)
 			{
-				Error = e.ToString();
+				_Error_ = _e_.ToString();
 				return false;
 			}
 
-			bool _readHeaderReturn;
-			NifHeaderSlim _NifHeaderSlim;
+			bool _readHeaderReturn_;
+			NifHeaderSlim _nifHeaderSlim_;
 			try
 			{
-				_NifHeaderSlim = new NifHeaderSlim(_binaryReader, NifIdentifier, ref Error, out _readHeaderReturn);
+				_nifHeaderSlim_ = new NifHeaderSlim(_binaryReader_, _NifIdentifier_, ref _Error_, out _readHeaderReturn_);
 			}
-			catch (Exception e)
+			catch (Exception _e_)
 			{
-				Error = e.ToString();
+				_Error_ = _e_.ToString();
 				return false;
 			}
 
-			if (_readHeaderReturn)
+			if (_readHeaderReturn_)
 			{
-				if (ReadNifBody(_binaryReader, NifIdentifier, in _NifHeaderSlim, ref Error))
+				if (ReadNifBody(_binaryReader_, _NifIdentifier_, in _nifHeaderSlim_, ref _Error_))
 				{
 					return true;
 				}
@@ -82,37 +80,37 @@ namespace Nif_CSharp
 			return false;
 		}
 
-		public static bool ReadNifHeader(BinaryReader NifRawDataStream, string NifIdentifier, ref string Error, out NifHeaderData _NifHeaderData)
+		public static bool ReadNifHeader(BinaryReader _NifRawDataStream_, string _NifIdentifier_, ref string _Error_, out NifHeaderData _NifHeaderData_)
 		{
-			bool _readHeaderReturn;
+			bool _readHeaderReturn_;
 			try
 			{
-				_NifHeaderData = new NifHeaderData(NifRawDataStream, NifIdentifier, ref Error, out _readHeaderReturn);
+				_NifHeaderData_ = new NifHeaderData(_NifRawDataStream_, _NifIdentifier_, ref _Error_, out _readHeaderReturn_);
 			}
-			catch (Exception e)
+			catch (Exception _e_)
 			{
-				Error = e.ToString();
-				_NifHeaderData = new NifHeaderData();
+				_Error_ = _e_.ToString();
+				_NifHeaderData_ = new NifHeaderData();
 				return false;
 			}
 
-			return _readHeaderReturn;
+			return _readHeaderReturn_;
 		}
 
-		public static bool ReadNifBody(BinaryReader NifRawDataStream, string NifIdentifier, in NifHeaderSlim _NifHeaderSlim, ref string Error)
+		public static bool ReadNifBody(BinaryReader _NifRawDataStream_, string _NifIdentifier_, in NifHeaderSlim _NifHeaderSlim_, ref string _Error_)
 		{
-			bool _readHeaderReturn;
+			bool _readHeaderReturn_;
 			try
 			{
-				_readHeaderReturn = true;
+				_readHeaderReturn_ = true;
 			}
-			catch (Exception e)
+			catch (Exception _e_)
 			{
-				Error = e.ToString();
+				_Error_ = _e_.ToString();
 				return false;
 			}
 
-			return _readHeaderReturn;
+			return _readHeaderReturn_;
 		}
 	}
 }

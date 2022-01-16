@@ -60,7 +60,7 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true : warnin
 #	When line with operators are wrapped to multiple lines, prefer operator at end of first line.
 dotnet_style_operator_placement_when_wrapping = end_of_line : warning
 
-file_header_template = // This file is or was originally a part of the Nif - C# Lib project, which can be found here: https://github.com/XJDHDR/Nif-CSharp_Lib\n// This code is provided under the license found here: https://github.com/XJDHDR/Nif-CSharp_Lib/blob/main/LICENSE.md\n//\n// The code in this file was written almost entirely thanks to the file format specification provided by the\n// NIFxml project: https://github.com/niftools/nifxml/\n//\n\n
+file_header_template = This file is or was originally a part of the Nif - CSharp Lib project, which can be found here: https://github.com/XJDHDR/Nif-CSharp_Lib\n This code is provided under the license found here: https://github.com/XJDHDR/Nif-CSharp_Lib/blob/main/LICENSE.md\n\n The code in this file was written almost entirely thanks to the file format specification provided by the\n NIFxml project: https://github.com/niftools/nifxml/\n\n
 
 
 #### C# Language Rules ####
@@ -203,27 +203,42 @@ dotnet_naming_style.const_naming_style.word_separator =
 dotnet_naming_style.const_naming_style.capitalization = all_upper
 
 
-# Parameter and Local rules
-dotnet_naming_rule.parameter_and_local_naming_rule.symbols = parameter_and_local_naming_symbol
-dotnet_naming_rule.parameter_and_local_naming_rule.style = parameter_and_local_naming_style
-dotnet_naming_rule.parameter_and_local_naming_rule.severity = warning
+# Parameter rules
+dotnet_naming_rule.parameter_naming_rule.symbols = parameter_naming_symbol
+dotnet_naming_rule.parameter_naming_rule.style = parameter_naming_style
+dotnet_naming_rule.parameter_naming_rule.severity = warning
+
+dotnet_naming_symbols.parameter_naming_symbol.applicable_kinds = parameter
+dotnet_naming_symbols.parameter_naming_symbol.applicable_accessibilities = *
+dotnet_naming_symbols.parameter_naming_symbol.required_modifiers =
+
+dotnet_naming_style.parameter_naming_style.required_prefix = _
+dotnet_naming_style.parameter_naming_style.required_suffix = _
+dotnet_naming_style.parameter_naming_style.word_separator =
+dotnet_naming_style.parameter_naming_style.capitalization = pascal_case
+
+
+# Local rules
+dotnet_naming_rule.local_naming_rule.symbols = local_naming_symbol
+dotnet_naming_rule.local_naming_rule.style = local_naming_style
+dotnet_naming_rule.local_naming_rule.severity = warning
 
 dotnet_naming_rule.local_symbols_naming_rule.symbols = local_symbols_naming_symbol
-dotnet_naming_rule.local_symbols_naming_rule.style = parameter_and_local_naming_style
+dotnet_naming_rule.local_symbols_naming_rule.style = local_naming_style
 dotnet_naming_rule.local_symbols_naming_rule.severity = warning
 
-dotnet_naming_symbols.parameter_and_local_naming_symbol.applicable_kinds = parameter, local, local_function
-dotnet_naming_symbols.parameter_and_local_naming_symbol.applicable_accessibilities = *
-dotnet_naming_symbols.parameter_and_local_naming_symbol.required_modifiers =
+dotnet_naming_symbols.local_naming_symbol.applicable_kinds = local, local_function
+dotnet_naming_symbols.local_naming_symbol.applicable_accessibilities = *
+dotnet_naming_symbols.local_naming_symbol.required_modifiers =
 
-dotnet_naming_symbols.parameter_and_local_naming_symbol.applicable_kinds = *
-dotnet_naming_symbols.parameter_and_local_naming_symbol.applicable_accessibilities = local
-dotnet_naming_symbols.parameter_and_local_naming_symbol.required_modifiers =
+dotnet_naming_symbols.local_symbols_naming_symbol.applicable_kinds = *
+dotnet_naming_symbols.local_symbols_naming_symbol.applicable_accessibilities = local
+dotnet_naming_symbols.local_symbols_naming_symbol.required_modifiers =
 
-dotnet_naming_style.parameter_and_local_naming_style.required_prefix = _
-dotnet_naming_style.parameter_and_local_naming_style.required_suffix = _
-dotnet_naming_style.parameter_and_local_naming_style.word_separator =
-dotnet_naming_style.parameter_and_local_naming_style.capitalization = camel_case
+dotnet_naming_style.local_naming_style.required_prefix = _
+dotnet_naming_style.local_naming_style.required_suffix = _
+dotnet_naming_style.local_naming_style.word_separator =
+dotnet_naming_style.local_naming_style.capitalization = camel_case
 
 
 # Public methods and variables naming rule
