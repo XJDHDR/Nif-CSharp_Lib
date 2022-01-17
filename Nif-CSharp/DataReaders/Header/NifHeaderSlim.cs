@@ -20,7 +20,7 @@ namespace Nif_CSharp.DataReaders.Header
 		// ReSharper disable MemberCanBePrivate.Global
 		// ReSharper disable InconsistentNaming
 		public readonly uint NifVersion;
-		public readonly bool IsLittleEndian;
+		public readonly bool IsDataLittleEndian;
 		public readonly uint UserVersion;
 		public readonly uint NumBlocks;
 		public readonly uint BSVersion;
@@ -39,7 +39,7 @@ namespace Nif_CSharp.DataReaders.Header
 		public NifHeaderSlim(NifHeaderData _NifHeaderData_)
 		{
 			NifVersion = _NifHeaderData_.NifVersion;
-			IsLittleEndian = _NifHeaderData_.IsLittleEndian;
+			IsDataLittleEndian = _NifHeaderData_.IsDataLittleEndian;
 			UserVersion = _NifHeaderData_.UserVersion;
 			NumBlocks = _NifHeaderData_.NumBlocks;
 			BSVersion = _NifHeaderData_.BSStreamHeader.BSVersion;
@@ -62,7 +62,7 @@ namespace Nif_CSharp.DataReaders.Header
 		{
 			// Set an initial state of these variables, to prevent "must be assigned upon exit" errors.
 			NifVersion = 0;
-			IsLittleEndian = true;	// default value if Endianness field not present.
+			IsDataLittleEndian = true;	// default value if Endianness field not present.
 			UserVersion = 0;
 			NumBlocks = 0;
 			BSVersion = 0;
@@ -100,7 +100,8 @@ namespace Nif_CSharp.DataReaders.Header
 			// The version was already extracted but this can be compared against what was extracted to see if they match.
 			if (NifVersion >= 0x03010001) // 3.1.0.1
 			{
-				if (!CommonNifHeaderMethods._Read2ndNifVersion(_NifRawDataStream_, in _NifIdentifier_, in NifVersion, ref _Error_))
+				if (!CommonNifHeaderMethods._Read2ndNifVersion(_NifRawDataStream_, in _NifIdentifier_, in NifVersion,
+					    false, ref _Error_))
 				{
 					_CompletedSuccessfully_ = false;
 					return;
@@ -110,7 +111,7 @@ namespace Nif_CSharp.DataReaders.Header
 			// NIFs from v20.0.0.3 will have a byte defining the endianness of the remaining data.
 			if (NifVersion >= 0x14000003) // 20.0.0.3
 			{
-				if (!CommonNifHeaderMethods._ReadNifEndiannessBit(_NifRawDataStream_, in _NifIdentifier_, ref IsLittleEndian, ref _Error_))
+				if (!CommonNifHeaderMethods._ReadNifEndiannessBit(_NifRawDataStream_, in _NifIdentifier_, ref IsDataLittleEndian, ref _Error_))
 				{
 					_CompletedSuccessfully_ = false;
 					return;
@@ -120,13 +121,13 @@ namespace Nif_CSharp.DataReaders.Header
 			// NIFs from v10.0.1.8 will have a little-endian uint32 with the User version.
 			if (NifVersion >= 0x0A001008) // 10.0.1.8
 			{
-				UserVersion = _NifRawDataStream_.ReadUInt32();
+				UserVersion = ValueReaders._ULittle32(_NifRawDataStream_, in IsDataLittleEndian);
 			}
 
 			// NIFs from v3.1.0.1 will have a uint32 with the number of NIF Objects in the model.
 			if (NifVersion >= 0x03010001) // 3.1.0.1
 			{
-				NumBlocks = _NifRawDataStream_.ReadUInt32();
+				NumBlocks = ValueReaders._ULittle32(_NifRawDataStream_, in IsDataLittleEndian);
 			}
 
 			// NIFs that pass the BSStreamHeader check will contain a series of bytes representing the BSStreamHeader
@@ -134,7 +135,7 @@ namespace Nif_CSharp.DataReaders.Header
 			if (ComplexVersionChecks._BSStreamHeader(NifVersion, UserVersion))
 			{
 				if (!BSStreamHeader._ReadOnlyVersionAndSkipEverythingElse(_NifRawDataStream_, in _NifIdentifier_,
-					ref _Error_, out BSVersion))
+					in IsDataLittleEndian, ref _Error_, out BSVersion))
 				{
 					_CompletedSuccessfully_ = false;
 					return;
@@ -144,7 +145,7 @@ namespace Nif_CSharp.DataReaders.Header
 			// NIFs from v30.0.0.0 will have an array of bytes containing metadata. Don't need this so skip.
 			if (NifVersion >= 0x1E000000) // 30.0.0.0
 			{
-				_NifRawDataStream_.BaseStream.Position += _NifRawDataStream_.ReadUInt32();
+				_NifRawDataStream_.BaseStream.Position += ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
 			}
 
 			// NIFs from v5.0.0.1 onwards will have some data listing the block types used in the model and mapping each
@@ -152,7 +153,7 @@ namespace Nif_CSharp.DataReaders.Header
 			if (NifVersion >= 0x05000001) // 5.0.0.1
 			{
 				if (!CommonNifHeaderMethods._ReadBlockTypesList(_NifRawDataStream_, in _NifIdentifier_, in NifVersion,
-					    in NumBlocks, ref BlockTypes, ref BlockTypeHashes, ref BlockTypeMappings, ref _Error_))
+					    in NumBlocks, in IsDataLittleEndian, ref BlockTypes, ref BlockTypeHashes, ref BlockTypeMappings, ref _Error_))
 				{
 					_CompletedSuccessfully_ = false;
 					return;

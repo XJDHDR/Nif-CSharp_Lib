@@ -31,12 +31,14 @@ namespace Nif_CSharp.DataReaders.Header
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <param name="_CompletedSuccessfully_">True if the constructor completed without encountering an error. False otherwise.</param>
-		internal BSStreamHeader(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, ref string _Error_, out bool _CompletedSuccessfully_)
+		internal BSStreamHeader(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, in bool _IsDataLittleEndian_,
+			ref string _Error_, out bool _CompletedSuccessfully_)
 		{
 			// BS Version is a little-endian uint32.
-			BSVersion = _NifRawDataStream_.ReadUInt32();
+			BSVersion = ValueReaders._ULittle32(_NifRawDataStream_, in _IsDataLittleEndian_);
 			Author = "";
 			UnknownInt = 0;
 			ProcessScript = "";
@@ -58,7 +60,7 @@ namespace Nif_CSharp.DataReaders.Header
 			// Next is an unknown int32 if BS Version is more than 130
 			if (BSVersion > 130)
 			{
-				UnknownInt = _NifRawDataStream_.ReadInt32();
+				UnknownInt = ValueReaders._Int(_NifRawDataStream_, _IsDataLittleEndian_);
 			}
 
 			// Next is the NIF's processing script encoded as an "ExportString".
@@ -108,10 +110,11 @@ namespace Nif_CSharp.DataReaders.Header
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <param name="_BsVersion_">The value for BS Version read from the data.</param>
 		/// <returns>True if the BS Version was read without any errors occurring. False otherwise.</returns>
-		internal static bool _ReadOnlyVersionAndSkipEverythingElse(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, ref string _Error_, out uint _BsVersion_)
+		internal static bool _ReadOnlyVersionAndSkipEverythingElse(BinaryReader _NifRawDataStream_, in string _NifIdentifier_,
+			in bool _IsDataLittleEndian_, ref string _Error_, out uint _BsVersion_)
 		{
 			// BS Version is a little-endian uint32.
-			_BsVersion_ = _NifRawDataStream_.ReadUInt32();
+			_BsVersion_ = ValueReaders._ULittle32(_NifRawDataStream_, in _IsDataLittleEndian_);
 
 			// Next is the NIF's author encoded as an "ExportString" (null-terminated string
 			// prefixed with it's length, including the null-terminator)

@@ -19,6 +19,9 @@
       <Compile Include="..\CommonCode\SkipBytes.cs">
         <Link>CommonCodeLinks\SkipBytes.cs</Link>
       </Compile>
+      <Compile Include="..\CommonCode\ValueReaders.cs">
+        <Link>CommonCodeLinks\ValueReaders.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

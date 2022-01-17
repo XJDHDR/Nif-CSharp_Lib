@@ -55,7 +55,7 @@ namespace Nif_CSharp.DataReaders.Header
 				}
 				_NifVersionCombined_ = (uint)((_nifVersionPart1_ << 24) | (_nifVersionPart2_ << 16) | (_nifVersionPart3_ << 8) | (_nifVersionPart4_ << 0));
 
-				// Check if the start of the HeaderString matches what we expect it to say.
+				// Check if the start of the HeaderString matches what it's supposed to say.
 				// For versions less than or equal to 10.0.1.2, the text must say "NetImmerse File Format, Version"
 				// For versions greater than or equal to 10.1.0.0, the text must say "Gamebryo File Format, Version"
 				if (_NifVersionCombined_ >= 0x0A010000)		// 10.1.0.0
@@ -99,19 +99,22 @@ namespace Nif_CSharp.DataReaders.Header
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
 		/// <param name="_NifVersion_">The NIF's version that was read from the Header String.</param>
+		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
+		/// Set to false if it's big-endian.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <returns>True if the 2nd version read here matches the number read from the Header String. False otherwise.</returns>
-		internal static bool _Read2ndNifVersion(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, in uint _NifVersion_,
-			ref string _Error_)
+		internal static bool _Read2ndNifVersion(BinaryReader _NifRawDataStream_, in string _NifIdentifier_,
+			in uint _NifVersion_, in bool _IsDataLittleEndian_, ref string _Error_)
 		{
 			// NIFs from v3.1.0.1 will have a uint32 with the NifVersion in little-endian format.
 			// _nifVersion2nd = 0x04000002;		// Default value for this field
+			ValueReaders._ULittle32(_NifRawDataStream_, in _IsDataLittleEndian_);
 			uint _nifVersionSecond_ = _NifRawDataStream_.ReadUInt32();
 			if (_NifVersion_ != _nifVersionSecond_)
 			{
 				_Error_ += $"Error while reading byte {_NifRawDataStream_.BaseStream.Position} in " +
-				               $"Nif: {_NifIdentifier_}\n" + "The 2nd version number read " +
-				              $"from the header was supposed to be {_NifVersion_} but {_nifVersionSecond_} was read instead";
+				           $"Nif: {_NifIdentifier_}\n" + "The 2nd version number read " +
+				           $"from the header was supposed to be {_NifVersion_} but {_nifVersionSecond_} was read instead";
 				return false;
 			}
 
@@ -123,17 +126,17 @@ namespace Nif_CSharp.DataReaders.Header
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
-		/// <param name="_IsLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <returns>True if the endianness value was successfully read. False if an error occurred.</returns>
 		internal static bool _ReadNifEndiannessBit(BinaryReader _NifRawDataStream_, in string _NifIdentifier_,
-			ref bool _IsLittleEndian_, ref string _Error_)
+			ref bool _IsDataLittleEndian_, ref string _Error_)
 		{
 			byte _endianByte_ = _NifRawDataStream_.ReadByte();
 			switch (_endianByte_)
 			{
 				case 0:
-					_IsLittleEndian_ = false;
+					_IsDataLittleEndian_ = false;
 					break;
 
 				case 1:
@@ -158,15 +161,17 @@ namespace Nif_CSharp.DataReaders.Header
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
 		/// <param name="_NifVersion_">The NIF's version.</param>
 		/// <param name="_NumBlocks_">The number of blocks present in the NIF.</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_BlockTypes_">The list of block types used in the NIF.</param>
 		/// <param name="_BlockTypeHashes_">The list of block type hashes used in the NIF.</param>
 		/// <param name="_BlockTypeMapping_">A mapping between the block types list and the blocks in the NIF.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <returns>True if the data regarding block types was successfully read. False otherwise.</returns>
 		internal static bool _ReadBlockTypesList(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, in uint _NifVersion_,
-			in uint _NumBlocks_, ref string[] _BlockTypes_, ref uint[] _BlockTypeHashes_, ref ushort[] _BlockTypeMapping_, ref string _Error_)
+			in uint _NumBlocks_, in bool _IsDataLittleEndian_, ref string[] _BlockTypes_, ref uint[] _BlockTypeHashes_,
+			ref ushort[] _BlockTypeMapping_, ref string _Error_)
 		{
-			ushort _numBlockTypes_ = _NifRawDataStream_.ReadUInt16();
+			ushort _numBlockTypes_ = ValueReaders._UShort(_NifRawDataStream_, in _IsDataLittleEndian_);
 
 			// NIFs with version 20.3.1.2 will use an array of block type hashes. Other qualifying versions have an array of strings.
 			if (_NifVersion_ != 0x14030102) // 20.3.1.2
