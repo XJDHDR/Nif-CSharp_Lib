@@ -3,25 +3,32 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <RootNamespace>Nif_CSharp</RootNamespace>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>8</LangVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Include="..\CommonCode\BytesToString.cs">
+      <Compile Include="..\CommonCode\VersionSupport.cs">
+        <Link>CommonCodeLinks\VersionSupport.cs</Link>
+      </Compile>
+      <Compile Include="..\Nif_CSLib_CommonCode\BytesToString.cs">
         <Link>CommonCodeLinks\BytesToString.cs</Link>
       </Compile>
-      <Compile Include="..\CommonCode\ComplexVersionChecks.cs">
+      <Compile Include="..\Nif_CSLib_CommonCode\ComplexVersionChecks.cs">
         <Link>CommonCodeLinks\ComplexVersionChecks.cs</Link>
       </Compile>
-      <Compile Include="..\CommonCode\SkipBytes.cs">
+      <Compile Include="..\Nif_CSLib_CommonCode\SkipBytes.cs">
         <Link>CommonCodeLinks\SkipBytes.cs</Link>
       </Compile>
-      <Compile Include="..\CommonCode\ValueReaders.cs">
+      <Compile Include="..\Nif_CSLib_CommonCode\ValueReaders.cs">
         <Link>CommonCodeLinks\ValueReaders.cs</Link>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Nif_CSLib_CommonCode\Nif_CSLib_CommonCode.csproj" />
     </ItemGroup>
 
 </Project>

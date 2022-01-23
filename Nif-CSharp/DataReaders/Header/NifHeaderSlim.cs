@@ -6,7 +6,9 @@
 //
 
 
-using CommonCode;
+using System;
+using System.IO;
+using Nif_CSLib_CommonCode;
 
 // Source in nif.xml: <compound name="Header">
 namespace Nif_CSharp.DataReaders.Header
@@ -142,6 +144,14 @@ namespace Nif_CSharp.DataReaders.Header
 				}
 			}
 
+			// Now that all the version data has been collected, check if this NIF is supported
+			if (!NifVersionSupport._Test(in _NifIdentifier_, in NifVersion, in UserVersion,
+				    in BSVersion, ref _Error_))
+			{
+				_CompletedSuccessfully_ = false;
+				return;
+			}
+
 			// NIFs from v30.0.0.0 will have an array of bytes containing metadata. Don't need this so skip.
 			if (NifVersion >= 0x1E000000) // 30.0.0.0
 			{
@@ -166,19 +176,26 @@ namespace Nif_CSharp.DataReaders.Header
 				BlockSizes = new uint[NumBlocks];
 				for (int _i_ = 0; _i_ < NumBlocks; _i_++)
 				{
-					BlockSizes[_i_] = _NifRawDataStream_.ReadUInt32();
+					BlockSizes[_i_] = ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
 				}
 			}
 
 			// NIFs from v20.1.0.1 will have an array of strings used in the model.
 			if (NifVersion >= 0x14010001) // 20.1.0.1
 			{
-				if (!CommonNifHeaderMethods._ReadStringsDatabase(_NifRawDataStream_, in _NifIdentifier_, ref _Error_,
-					    out StringsDatabase))
+				if (!CommonNifHeaderMethods._ReadStringsDatabase(_NifRawDataStream_, in _NifIdentifier_,
+					    in IsDataLittleEndian, ref _Error_, out StringsDatabase))
 				{
 					_CompletedSuccessfully_ = false;
 					return;
 				}
+			}
+
+			// NIFs from v5.0.0.6 onwards will have an array of UInt32s designating groups.
+			// This is not needed in the Slim Header so skip over it.
+			if (NifVersion >= 0x05000006) // 5.0.0.6
+			{
+				_NifRawDataStream_.BaseStream.Position += ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
 			}
 
 			// That's all the data required to create the slim header.

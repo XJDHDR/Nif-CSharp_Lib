@@ -9,6 +9,8 @@
 // ReSharper disable MemberCanBePrivate.Global
 
 
+using System;
+using System.IO;
 using Nif_CSharp.DataReaders.Header;
 
 namespace Nif_CSharp

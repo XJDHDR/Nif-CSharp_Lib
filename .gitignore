@@ -1,4 +1,6 @@
-.idea/
-.vs/
-*/bin/
-*/obj/
+/*/bin/
+/*/obj/
+/.idea/.idea.Nif-CSharp_Lib/.idea/workspace.xml
+/.vs/
+/Utilities/*/bin/
+/Utilities/*/obj/

@@ -5,9 +5,11 @@
 //  NIFxml project: https://github.com/niftools/nifxml/
 //
 
+using System;
 using System.Buffers.Binary;
+using System.IO;
 
-namespace CommonCode
+namespace Nif_CSLib_CommonCode
 {
 	/// <summary>
 	/// Struct used to hold methods that can be used to read binary data into C# value types, taking the NIF's endianness
@@ -22,7 +24,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The UInt64 that was read.</returns>
-		internal static ulong _UInt64(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static ulong _UInt64(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -40,7 +42,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The Int64 that was read.</returns>
-		internal static long _Int64(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static long _Int64(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -58,7 +60,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The UInt32 that was read.</returns>
-		internal static uint _ULittle32(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static uint _ULittle32(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (BitConverter.IsLittleEndian)
 			{
@@ -76,7 +78,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The UInt32 that was read.</returns>
-		internal static uint _UInt(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static uint _UInt(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -94,7 +96,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The Int32 that was read.</returns>
-		internal static int _Int(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static int _Int(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -112,7 +114,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The UInt16 that was read.</returns>
-		internal static ushort _UShort(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static ushort _UShort(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -130,7 +132,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The Int16 that was read.</returns>
-		internal static short _Short(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static short _Short(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -152,7 +154,7 @@ namespace CommonCode
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <param name="_ReadBool_">The boolean that was read.</param>
 		/// <returns></returns>
-		internal static bool _Bool(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, in uint _NifVersion_,
+		public static bool _Bool(BinaryReader _NifRawDataStream_, in string _NifIdentifier_, in uint _NifVersion_,
 			in bool _IsDataLittleEndian_, ref string _Error_,  out bool _ReadBool_)
 		{
 			uint _readBoolVal_;
@@ -196,7 +198,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The Float that was read.</returns>
-		internal static float _Float(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static float _Float(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
 			{
@@ -204,7 +206,7 @@ namespace CommonCode
 			}
 
 			byte[] _floatBytes_ = _NifRawDataStream_.ReadBytes(4);
-			return (_floatBytes_[0] << 24) | (_floatBytes_[1] << 16) | (_floatBytes_[2] << 8) | _floatBytes_[3];
+			return BitConverter.ToSingle(_floatBytes_, 0);
 		}
 
 		/// <summary>
@@ -214,7 +216,7 @@ namespace CommonCode
 		/// <param name="_IsDataLittleEndian_">Set to True if the data being read is in little-endian format.
 		/// Set to false if it's big-endian.</param>
 		/// <returns>The Half Float that was read.</returns>
-		internal static float _HFloat(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
+		public static float _HFloat(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
 			// TODO: Convert this to use the "Half" value type if and when .NET 5 support is added.
 			if (_IsDataLittleEndian_ == BitConverter.IsLittleEndian)
@@ -223,7 +225,7 @@ namespace CommonCode
 			}
 
 			byte[] _floatBytes_ = _NifRawDataStream_.ReadBytes(2);
-			return (_floatBytes_[0] << 8) | _floatBytes_[1];
+			return BitConverter.ToSingle(_floatBytes_, 0);
 		}
 
 	}

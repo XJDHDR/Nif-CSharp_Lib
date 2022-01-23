@@ -6,7 +6,9 @@
 //
 
 
-using CommonCode;
+using System;
+using System.IO;
+using Nif_CSLib_CommonCode;
 
 namespace Nif_CSharp.DataReaders.Header
 {
@@ -179,7 +181,7 @@ namespace Nif_CSharp.DataReaders.Header
 				_BlockTypes_ = new string[_numBlockTypes_];
 				for (ushort _i_ = 0; _i_ < _numBlockTypes_; _i_++)
 				{
-					if (!BytesToString._ReadSizedString(_NifRawDataStream_, out string _blockTypeRead_))
+					if (!BytesToString._ReadSizedString(_NifRawDataStream_, in _IsDataLittleEndian_, out string _blockTypeRead_))
 					{
 						_Error_ += $"{_blockTypeRead_}\nAn error occured while attempting to read byte " +
 						           $"{_NifRawDataStream_.BaseStream.Position} in the NIF data for: {_NifIdentifier_}";
@@ -193,7 +195,7 @@ namespace Nif_CSharp.DataReaders.Header
 				_BlockTypeHashes_ = new uint[_numBlockTypes_];
 				for (ushort _i_ = 0; _i_ < _numBlockTypes_; _i_++)
 				{
-					_BlockTypeHashes_[_i_] = _NifRawDataStream_.ReadUInt32();
+					_BlockTypeHashes_[_i_] = ValueReaders._UInt(_NifRawDataStream_, in _IsDataLittleEndian_);
 				}
 			}
 
@@ -201,7 +203,7 @@ namespace Nif_CSharp.DataReaders.Header
 			_BlockTypeMapping_ = new ushort[_NumBlocks_];
 			for (int _i_ = 0; _i_ < _NumBlocks_; _i_++)
 			{
-				_BlockTypeMapping_[_i_] = _NifRawDataStream_.ReadUInt16();
+				_BlockTypeMapping_[_i_] = ValueReaders._UShort(_NifRawDataStream_, in _IsDataLittleEndian_);
 				// The last bit appears to be a PhysX flag that is not needed. Remove if present.
 				if ((_BlockTypeMapping_[_i_] & (1 << 15)) != 0)
 				{
@@ -217,19 +219,20 @@ namespace Nif_CSharp.DataReaders.Header
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <param name="_StringsDatabase_">List of all the strings used in the NIF.</param>
 		/// <returns>True if the strings database was successfully created. False if an error occurred.</returns>
 		internal static bool _ReadStringsDatabase(BinaryReader _NifRawDataStream_, in string _NifIdentifier_,
-			ref string _Error_, out string[] _StringsDatabase_)
+			in bool _IsDataLittleEndian_, ref string _Error_, out string[] _StringsDatabase_)
 		{
-			uint _numStrings_ = _NifRawDataStream_.ReadUInt32();
-			uint _maxStringLength_ = _NifRawDataStream_.ReadUInt32();
+			uint _numStrings_ = ValueReaders._UInt(_NifRawDataStream_, in _IsDataLittleEndian_);
+			uint _maxStringLength_ = ValueReaders._UInt(_NifRawDataStream_, in _IsDataLittleEndian_);
 			_StringsDatabase_ = new string[_numStrings_];
 			for (int _i_ = 0; _i_ < _numStrings_; _i_++)
 			{
 				long _startPos_ = _NifRawDataStream_.BaseStream.Position;
-				if (!BytesToString._ReadSizedString(_NifRawDataStream_, out _StringsDatabase_[_i_]))
+				if (!BytesToString._ReadSizedString(_NifRawDataStream_, in _IsDataLittleEndian_, out _StringsDatabase_[_i_]))
 				{
 					_Error_ += $"{_StringsDatabase_[_i_]}\nAn error occured while attempting to read byte " +
 					           $"{_NifRawDataStream_.BaseStream.Position} in the NIF data for: {_NifIdentifier_}";

@@ -4,7 +4,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nif-CSharp", "Nif-CSharp\Ni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nif-UnityGO", "Nif-UnityGO\Nif-UnityGO.csproj", "{64B2D8DD-9C9B-46CE-8BAA-C428CC57DC50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonCode", "CommonCode\CommonCode.csproj", "{556EFB13-8D9C-41BB-B77A-F17912A2138D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nif_CSLib_CommonCode", "Nif_CSLib_CommonCode\Nif_CSLib_CommonCode.csproj", "{556EFB13-8D9C-41BB-B77A-F17912A2138D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{443C4C39-D168-4A24-9703-946B196C2E5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Create_Enum_From_Xml", "Utilities\Create_Enum_From_Xml\Create_Enum_From_Xml.csproj", "{013A0477-9F01-4C07-8E2B-51E2A26FEEED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Create_Bitflag_from_Xml", "Utilities\Create_Bitflag_from_Xml\Create_Bitflag_from_Xml.csproj", "{41BCD688-7599-4638-9292-AE53155DFF8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +30,17 @@ Global
 		{556EFB13-8D9C-41BB-B77A-F17912A2138D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{556EFB13-8D9C-41BB-B77A-F17912A2138D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{556EFB13-8D9C-41BB-B77A-F17912A2138D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013A0477-9F01-4C07-8E2B-51E2A26FEEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{013A0477-9F01-4C07-8E2B-51E2A26FEEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{013A0477-9F01-4C07-8E2B-51E2A26FEEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{013A0477-9F01-4C07-8E2B-51E2A26FEEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41BCD688-7599-4638-9292-AE53155DFF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41BCD688-7599-4638-9292-AE53155DFF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41BCD688-7599-4638-9292-AE53155DFF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41BCD688-7599-4638-9292-AE53155DFF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{013A0477-9F01-4C07-8E2B-51E2A26FEEED} = {443C4C39-D168-4A24-9703-946B196C2E5F}
+		{41BCD688-7599-4638-9292-AE53155DFF8E} = {443C4C39-D168-4A24-9703-946B196C2E5F}
 	EndGlobalSection
 EndGlobal

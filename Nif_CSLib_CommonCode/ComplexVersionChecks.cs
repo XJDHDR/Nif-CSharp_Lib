@@ -6,12 +6,12 @@
 //
 
 
-namespace CommonCode
+namespace Nif_CSLib_CommonCode
 {
 	/// <summary>
 	/// Holds various methods used to perform the more complicated version tests documented in the NIF xml specification
 	/// </summary>
-	internal struct ComplexVersionChecks
+	public struct ComplexVersionChecks
 	{
 		/// <summary>
 		/// Tests whether the current NIF has (or should have) a BS Stream Header.
@@ -19,7 +19,7 @@ namespace CommonCode
 		/// <param name="_NifVersion_">NIF's Version</param>
 		/// <param name="_UserVersion_">NIF's User Version</param>
 		/// <returns>True if the model's header has a BS Stream Header. False otherwise.</returns>
-		internal static bool _BSStreamHeader(in uint _NifVersion_, in uint _UserVersion_)
+		public static bool _BSStreamHeader(in uint _NifVersion_, in uint _UserVersion_)
 		{
 			switch (_NifVersion_)
 			{

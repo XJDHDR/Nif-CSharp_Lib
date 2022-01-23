@@ -6,7 +6,8 @@
 //
 
 
-using CommonCode;
+using System.IO;
+using Nif_CSLib_CommonCode;
 
 namespace Nif_CSharp.DataReaders.Header
 {
@@ -19,7 +20,7 @@ namespace Nif_CSharp.DataReaders.Header
 		// ReSharper disable MemberCanBePrivate.Global
 		public readonly uint BSVersion;
 		public readonly string Author;
-		public readonly int UnknownInt;
+		public readonly uint UnknownInt;
 		public readonly string ProcessScript;
 		public readonly string ExportScript;
 		public readonly string MaxFilepath;
@@ -60,7 +61,7 @@ namespace Nif_CSharp.DataReaders.Header
 			// Next is an unknown int32 if BS Version is more than 130
 			if (BSVersion > 130)
 			{
-				UnknownInt = ValueReaders._Int(_NifRawDataStream_, _IsDataLittleEndian_);
+				UnknownInt = ValueReaders._UInt(_NifRawDataStream_, _IsDataLittleEndian_);
 			}
 
 			// Next is the NIF's processing script encoded as an "ExportString".
@@ -107,6 +108,7 @@ namespace Nif_CSharp.DataReaders.Header
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_NifIdentifier_">String you can use to identify the NIF in error messages (e.g. the path to the NIF file).</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_Error_">Supply a string that will be used to return any errors that occurred while reading the header.</param>
 		/// <param name="_BsVersion_">The value for BS Version read from the data.</param>
 		/// <returns>True if the BS Version was read without any errors occurring. False otherwise.</returns>

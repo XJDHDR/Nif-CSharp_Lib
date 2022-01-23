@@ -6,7 +6,9 @@
 //
 
 
-using CommonCode;
+using System;
+using System.IO;
+using Nif_CSLib_CommonCode;
 
 namespace Nif_CSharp.DataReaders.Header
 {
@@ -133,6 +135,14 @@ namespace Nif_CSharp.DataReaders.Header
 				}
 			}
 
+			// Now that all the version data has been collected, check if this NIF is supported
+			if (!NifVersionSupport._Test(in _NifIdentifier_, in NifVersion, in UserVersion,
+				    in BSStreamHeader.BSVersion, ref _Error_))
+			{
+				_CompletedSuccessfully_ = false;
+				return;
+			}
+
 			// NIFs from v30.0.0.0 will have an array of bytes containing metadata
 			if (NifVersion >= 0x1E000000) // 30.0.0.0
 			{
@@ -162,15 +172,15 @@ namespace Nif_CSharp.DataReaders.Header
 				BlockSizes = new uint[NumBlocks];
 				for (int _i_ = 0; _i_ < NumBlocks; _i_++)
 				{
-					BlockSizes[_i_] = _NifRawDataStream_.ReadUInt32();
+					BlockSizes[_i_] = ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
 				}
 			}
 
 			// NIFs from v20.1.0.1 onwards will have an array of strings used in the model.
 			if (NifVersion >= 0x14010001) // 20.1.0.1
 			{
-				if (!CommonNifHeaderMethods._ReadStringsDatabase(_NifRawDataStream_, in _NifIdentifier_, ref _Error_,
-					    out StringsDatabase))
+				if (!CommonNifHeaderMethods._ReadStringsDatabase(_NifRawDataStream_, in _NifIdentifier_,
+					    in IsDataLittleEndian, ref _Error_, out StringsDatabase))
 				{
 					_CompletedSuccessfully_ = false;
 					return;
@@ -180,11 +190,19 @@ namespace Nif_CSharp.DataReaders.Header
 			// NIFs from v5.0.0.6 onwards will have an array of UInt32s designating groups.
 			if (NifVersion >= 0x05000006) // 5.0.0.6
 			{
-				uint _numGroups_ = _NifRawDataStream_.ReadUInt32();
+				uint _numGroups_ = ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
+				if (_numGroups_ > int.MaxValue) // TODO: Replace this with an "Array.MaxLength" if .NET 6 support is added.
+				{
+					_Error_ = $"Error while reading a UInt for the number of groups at byte {_NifRawDataStream_.BaseStream.Position}: " +
+					          $"There are more than {int.MaxValue} groups defined, which is not supported.";
+					_CompletedSuccessfully_ = false;
+					return;
+				}
+
 				Groups = new uint[_numGroups_];
 				for (int _i_ = 0; _i_ < _numGroups_; _i_++)
 				{
-					Groups[_i_] = _NifRawDataStream_.ReadUInt32();
+					Groups[_i_] = ValueReaders._UInt(_NifRawDataStream_, in IsDataLittleEndian);
 				}
 			}
 

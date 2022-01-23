@@ -6,14 +6,15 @@
 //
 
 
+using System.IO;
 using System.Text;
 
-namespace CommonCode
+namespace Nif_CSLib_CommonCode
 {
 	/// <summary>
 	/// Struct holding methods used to convert sequences of bytes into strings.
 	/// </summary>
-	internal struct BytesToString
+	public struct BytesToString
 	{
 		/// <summary>
 		/// Used to get a string from a sequence of bytes that doesn't specify the string's length but is terminated
@@ -23,7 +24,7 @@ namespace CommonCode
 		/// <param name="_TerminatingByte_">Supply the terminating byte value that is supposed to terminate the string.</param>
 		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
 		/// <returns>True if the terminating byte was found within 1000 bytes of start. False otherwise.</returns>
-		internal static bool _UnprefixedByteTerminatedString(BinaryReader _NifRawDataStream_, byte _TerminatingByte_, out string _ReadString_)
+		public static bool _UnprefixedByteTerminatedString(BinaryReader _NifRawDataStream_, byte _TerminatingByte_, out string _ReadString_)
 		{
 			// Read bytes until either the specified character is found or 1000 bytes are read;
 			long _startPos_ = _NifRawDataStream_.BaseStream.Position;
@@ -61,9 +62,9 @@ namespace CommonCode
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
 		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
 		/// <returns>True if the Export String was successfully read. False otherwise.</returns>
-		internal static bool _ReadExportString(BinaryReader _NifRawDataStream_, out string _ReadString_)
+		public static bool _ReadExportString(BinaryReader _NifRawDataStream_, out string _ReadString_)
 		{
-			return _ReadLengthPrefixedStringWithTerminatingByte(_NifRawDataStream_, 0x00, out _ReadString_);
+			return _ReadByteLengthPrefixedStringWithTerminatingByte(_NifRawDataStream_, 0x00, out _ReadString_);
 		}
 
 		/// <summary>
@@ -74,7 +75,7 @@ namespace CommonCode
 		/// <param name="_TerminatingByte_">Supply the terminating byte value that is supposed to terminate the string.</param>
 		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
 		/// <returns>True if the last byte in the string was the terminating byte. False otherwise.</returns>
-		internal static bool _ReadLengthPrefixedStringWithTerminatingByte(BinaryReader _NifRawDataStream_,
+		public static bool _ReadByteLengthPrefixedStringWithTerminatingByte(BinaryReader _NifRawDataStream_,
 			byte _TerminatingByte_, out string _ReadString_)
 		{
 			byte _dataUnitLength_ = (byte)(_NifRawDataStream_.ReadByte() - 1);
@@ -99,18 +100,19 @@ namespace CommonCode
 		/// use a UInt32 to designate length.
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <param name="_ReadString_">Outputs either the string that was read or an error message if an error occurred.</param>
 		/// <returns>True if the string's indicated length is less than 2147483647. False otherwise.</returns>
-		internal static bool _ReadSizedString(BinaryReader _NifRawDataStream_, out string _ReadString_)
+		public static bool _ReadSizedString(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_, out string _ReadString_)
 		{
-			int _dataUnitLength_ = _NifRawDataStream_.ReadInt32();
-			if (_dataUnitLength_ < 0)
+			uint _dataUnitLength_ = ValueReaders._UInt(_NifRawDataStream_, in _IsDataLittleEndian_);
+			if (_dataUnitLength_ > int.MaxValue) // TODO: Replace this with an "Array.MaxLength" if .NET 6 support is added.
 			{
 				_ReadString_ = $"Error while reading a SizedString at byte {_NifRawDataStream_.BaseStream.Position}: " +
 				               $"String length is more than {int.MaxValue}, which is not supported.";
 				return false;
 			}
-			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes(_dataUnitLength_);
+			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes((int)_dataUnitLength_);
 			_ReadString_ = Encoding.UTF8.GetString(_stringBytes_);
 			return true;
 		}
@@ -119,10 +121,11 @@ namespace CommonCode
 		/// Used to read a sequences of bytes identified in NIF xml as an "SizedString16".
 		/// </summary>
 		/// <param name="_NifRawDataStream_">Supply a BinaryReader that contains the NIF data.</param>
+		/// <param name="_IsDataLittleEndian_">Set to false if the data is big-endian. Stays True if little-endian.</param>
 		/// <returns>The string that was read from the data.</returns>
-		internal static string _ReadSizedString16(BinaryReader _NifRawDataStream_)
+		public static string _ReadSizedString16(BinaryReader _NifRawDataStream_, in bool _IsDataLittleEndian_)
 		{
-			byte _dataUnitLength_ = _NifRawDataStream_.ReadByte();
+			ushort _dataUnitLength_ = ValueReaders._UShort(_NifRawDataStream_, in _IsDataLittleEndian_);
 			byte[] _stringBytes_ = _NifRawDataStream_.ReadBytes(_dataUnitLength_);
 			return Encoding.UTF8.GetString(_stringBytes_);
 		}
