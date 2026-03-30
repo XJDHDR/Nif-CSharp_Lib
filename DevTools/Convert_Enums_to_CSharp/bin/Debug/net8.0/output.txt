@@ -1,0 +1,1720 @@
+	/// <summary> Describes which lighting equation components influence the final vertex color for NiVertexColorProperty. </summary>
+	public enum LightMode : uint
+	{
+		/// <summary> Emissive. </summary>
+		LIGHT_MODE_EMISSIVE		= 0,
+
+
+		/// <summary> Emissive + Ambient + Diffuse. (Default) </summary>
+		LIGHT_MODE_EMI_AMB_DIF	= 1,
+	}
+
+	/// <summary> The animation cyle behavior. </summary>
+	public enum CycleType : uint
+	{
+		/// <summary> Loop </summary>
+		CYCLE_LOOP		= 0,
+
+
+		/// <summary> Reverse </summary>
+		CYCLE_REVERSE	= 1,
+
+
+		/// <summary> Clamp </summary>
+		CYCLE_CLAMP		= 2,
+	}
+
+	/// <summary> The force field type. </summary>
+	public enum FieldType : uint
+	{
+		/// <summary> Wind (fixed direction) </summary>
+		FIELD_WIND	= 0,
+
+
+		/// <summary> Point (fixed origin) </summary>
+		FIELD_POINT	= 1,
+	}
+
+	/// <summary> Determines the way the billboard will react to the camera. Billboard mode is stored in lowest 3 bits although Oblivion vanilla nifs uses values higher than 7. </summary>
+	public enum BillboardMode : ushort
+	{
+		/// <summary> Align billboard and camera forward vector. Minimized rotation. </summary>
+		ALWAYS_FACE_CAMERA	= 0,
+
+
+		/// <summary> Align billboard and camera forward vector while allowing rotation around the up axis. </summary>
+		ROTATE_ABOUT_UP		= 1,
+
+
+		/// <summary> Align billboard and camera forward vector. Non-minimized rotation. </summary>
+		RIGID_FACE_CAMERA	= 2,
+
+
+		/// <summary> Billboard forward vector always faces camera ceneter. Minimized rotation. </summary>
+		ALWAYS_FACE_CENTER	= 3,
+
+
+		/// <summary> Billboard forward vector always faces camera ceneter. Non-minimized rotation. </summary>
+		RIGID_FACE_CENTER	= 4,
+
+
+		/// <summary> The billboard will only rotate around its local Z axis (it always stays in its local X-Y plane). </summary>
+		BSROTATE_ABOUT_UP	= 5,
+
+
+		/// <summary> The billboard will only rotate around the up axis (same as ROTATE_ABOUT_UP?). </summary>
+		ROTATE_ABOUT_UP2	= 9,
+	}
+
+	/// <summary> Describes stencil buffer test modes for NiStencilProperty. </summary>
+	public enum StencilCompareMode : uint
+	{
+		/// <summary> Always false. Ref value is ignored. </summary>
+		TEST_NEVER			= 0,
+
+
+		/// <summary> VRef ‹ VBuf </summary>
+		TEST_LESS			= 1,
+
+
+		/// <summary> VRef = VBuf </summary>
+		TEST_EQUAL			= 2,
+
+
+		/// <summary> VRef ≤ VBuf </summary>
+		TEST_LESS_EQUAL		= 3,
+
+
+		/// <summary> VRef › VBuf </summary>
+		TEST_GREATER		= 4,
+
+
+		/// <summary> VRef ≠ VBuf </summary>
+		TEST_NOT_EQUAL		= 5,
+
+
+		/// <summary> VRef ≥ VBuf </summary>
+		TEST_GREATER_EQUAL	= 6,
+
+
+		/// <summary> Always true. Buffer is ignored. </summary>
+		TEST_ALWAYS			= 7,
+	}
+
+	/// <summary> Describes the actions which can occur as a result of tests for NiStencilProperty. </summary>
+	public enum StencilAction : uint
+	{
+		/// <summary> Keep the current value in the stencil buffer. </summary>
+		ACTION_KEEP			= 0,
+
+
+		/// <summary> Write zero to the stencil buffer. </summary>
+		ACTION_ZERO			= 1,
+
+
+		/// <summary> Write the reference value to the stencil buffer. </summary>
+		ACTION_REPLACE		= 2,
+
+
+		/// <summary> Increment the value in the stencil buffer. </summary>
+		ACTION_INCREMENT	= 3,
+
+
+		/// <summary> Decrement the value in the stencil buffer. </summary>
+		ACTION_DECREMENT	= 4,
+
+
+		/// <summary> Bitwise invert the value in the stencil buffer. </summary>
+		ACTION_INVERT		= 5,
+	}
+
+	/// <summary> Describes the face culling options for NiStencilProperty. </summary>
+	public enum StencilDrawMode : uint
+	{
+		/// <summary> Application default, chooses between DRAW_CCW or DRAW_BOTH. </summary>
+		DRAW_CCW_OR_BOTH	= 0,
+
+
+		/// <summary> Draw only the triangles whose vertices are ordered CCW with respect to the viewer. (Standard behavior) </summary>
+		DRAW_CCW			= 1,
+
+
+		/// <summary> Draw only the triangles whose vertices are ordered CW with respect to the viewer. (Effectively flips faces) </summary>
+		DRAW_CW				= 2,
+
+
+		/// <summary> Draw all triangles, regardless of orientation. (Effectively force double-sided) </summary>
+		DRAW_BOTH			= 3,
+	}
+
+	/// <summary> Describes Z-buffer test modes for NiZBufferProperty. "Less than" = closer to camera, "Greater than" = further from camera. </summary>
+	public enum ZCompareMode : uint
+	{
+		/// <summary> Always true. Buffer is ignored. </summary>
+		ZCOMP_ALWAYS		= 0,
+
+
+		/// <summary> VRef ‹ VBuf </summary>
+		ZCOMP_LESS			= 1,
+
+
+		/// <summary> VRef = VBuf </summary>
+		ZCOMP_EQUAL			= 2,
+
+
+		/// <summary> VRef ≤ VBuf </summary>
+		ZCOMP_LESS_EQUAL	= 3,
+
+
+		/// <summary> VRef › VBuf </summary>
+		ZCOMP_GREATER		= 4,
+
+
+		/// <summary> VRef ≠ VBuf </summary>
+		ZCOMP_NOT_EQUAL		= 5,
+
+
+		/// <summary> VRef ≥ VBuf </summary>
+		ZCOMP_GREATER_EQUAL	= 6,
+
+
+		/// <summary> Always false. Ref value is ignored. </summary>
+		ZCOMP_NEVER			= 7,
+	}
+
+	/// <summary> Bethesda Havok, based on hkpMotion::MotionType. Motion type of a rigid body determines what happens when it is simulated. </summary>
+	public enum hkMotionType : byte
+	{
+		/// <summary> Invalid </summary>
+		MO_SYS_INVALID				= 0,
+
+
+		/// <summary> A fully-simulated, movable rigid body. At construction time the engine checks the input inertia and selects MO_SYS_SPHERE_INERTIA or MO_SYS_BOX_INERTIA as appropriate. </summary>
+		MO_SYS_DYNAMIC				= 1,
+
+
+		/// <summary> Simulation is performed using a sphere inertia tensor. </summary>
+		MO_SYS_SPHERE_INERTIA		= 2,
+
+
+		/// <summary> This is the same as MO_SYS_SPHERE_INERTIA, except that simulation of the rigid body is "softened". </summary>
+		MO_SYS_SPHERE_STABILIZED	= 3,
+
+
+		/// <summary> Simulation is performed using a box inertia tensor. </summary>
+		MO_SYS_BOX_INERTIA			= 4,
+
+
+		/// <summary> This is the same as MO_SYS_BOX_INERTIA, except that simulation of the rigid body is "softened". </summary>
+		MO_SYS_BOX_STABILIZED		= 5,
+
+
+		/// <summary> Simulation is not performed as a normal rigid body. The keyframed rigid body has an infinite mass when viewed by the rest of the system. (used for creatures) </summary>
+		MO_SYS_KEYFRAMED			= 6,
+
+
+		/// <summary> This motion type is used for the static elements of a game scene, e.g. the landscape. Faster than MO_SYS_KEYFRAMED at velocity 0. (used for weapons) </summary>
+		MO_SYS_FIXED				= 7,
+
+
+		/// <summary> A box inertia motion which is optimized for thin boxes and has less stability problems </summary>
+		MO_SYS_THIN_BOX				= 8,
+
+
+		/// <summary> A specialized motion used for character controllers </summary>
+		MO_SYS_CHARACTER			= 9,
+	}
+
+	/// <summary> Bethesda Havok, based on hkpRigidBodyDeactivator::DeactivatorType. Deactivator Type determines which mechanism Havok will use to classify the body as deactivated. </summary>
+	public enum hkDeactivatorType : byte
+	{
+		/// <summary> Invalid </summary>
+		DEACTIVATOR_INVALID	= 0,
+
+
+		/// <summary> This will force the rigid body to never deactivate. </summary>
+		DEACTIVATOR_NEVER	= 1,
+
+
+		/// <summary> Tells Havok to use a spatial deactivation scheme. This makes use of high and low frequencies of positional motion to determine when deactivation should occur. </summary>
+		DEACTIVATOR_SPATIAL	= 2,
+	}
+
+	/// <summary> Bethesda Havok, based on hkpRigidBodyCinfo::SolverDeactivation. A list of possible solver deactivation settings. This value defines how aggressively the solver deactivates objects. Note: Solver deactivation does not save CPU, but reduces creeping of movable objects in a pile quite dramatically. </summary>
+	public enum hkSolverDeactivation : byte
+	{
+		/// <summary> Invalid </summary>
+		SOLVER_DEACTIVATION_INVALID	= 0,
+
+
+		/// <summary> No solver deactivation. </summary>
+		SOLVER_DEACTIVATION_OFF		= 1,
+
+
+		/// <summary> Very conservative deactivation, typically no visible artifacts. </summary>
+		SOLVER_DEACTIVATION_LOW		= 2,
+
+
+		/// <summary> Normal deactivation, no serious visible artifacts in most cases. </summary>
+		SOLVER_DEACTIVATION_MEDIUM	= 3,
+
+
+		/// <summary> Fast deactivation, visible artifacts. </summary>
+		SOLVER_DEACTIVATION_HIGH	= 4,
+
+
+		/// <summary> Very fast deactivation, visible artifacts. </summary>
+		SOLVER_DEACTIVATION_MAX		= 5,
+	}
+
+	/// <summary> Bethesda Havok, based on hkpCollidableQualityType. Describes the priority and quality of collisions for a body, e.g. you may expect critical game play objects to have solid high-priority collisions so that they never sink into ground, or may allow penetrations for visual debris objects. Notes: - Fixed and keyframed objects cannot interact with each other. - Debris can interpenetrate but still responds to Bullet hits. - Critical objects are forced to not interpenetrate. - Moving objects can interpenetrate slightly with other Moving or Debris objects but nothing else. </summary>
+	public enum hkQualityType : byte
+	{
+		/// <summary> Automatically assigned to MO_QUAL_FIXED, MO_QUAL_KEYFRAMED or MO_QUAL_DEBRIS </summary>
+		MO_QUAL_INVALID				= 0,
+
+
+		/// <summary> Static body. </summary>
+		MO_QUAL_FIXED				= 1,
+
+
+		/// <summary> Animated body with infinite mass. </summary>
+		MO_QUAL_KEYFRAMED			= 2,
+
+
+		/// <summary> Low importance bodies adding visual detail. </summary>
+		MO_QUAL_DEBRIS				= 3,
+
+
+		/// <summary> Moving bodies which should not penetrate or leave the world, but can. </summary>
+		MO_QUAL_MOVING				= 4,
+
+
+		/// <summary> Gameplay critical bodies which cannot penetrate or leave the world under any circumstance. </summary>
+		MO_QUAL_CRITICAL			= 5,
+
+
+		/// <summary> Fast-moving bodies, such as projectiles. </summary>
+		MO_QUAL_BULLET				= 6,
+
+
+		/// <summary> For user. </summary>
+		MO_QUAL_USER				= 7,
+
+
+		/// <summary> For use with rigid body character controllers. </summary>
+		MO_QUAL_CHARACTER			= 8,
+
+
+		/// <summary> 
+            Moving bodies with infinite mass which should report contact points and TOI collisions against all other bodies.
+         </summary>
+		MO_QUAL_KEYFRAMED_REPORT	= 9,
+	}
+
+	/// <summary> Describes the type of gravitational force. </summary>
+	public enum ForceType : uint
+	{
+		FORCE_PLANAR	= 0,
+
+		FORCE_SPHERICAL	= 1,
+
+		FORCE_UNKNOWN	= 2,
+	}
+
+	/// <summary> Describes which aspect of the NiTextureTransform the NiTextureTransformController will modify. </summary>
+	public enum TransformMember : uint
+	{
+		/// <summary> Control the translation of the U coordinates. </summary>
+		TT_TRANSLATE_U	= 0,
+
+
+		/// <summary> Control the translation of the V coordinates. </summary>
+		TT_TRANSLATE_V	= 1,
+
+
+		/// <summary> Control the rotation of the coordinates. </summary>
+		TT_ROTATE		= 2,
+
+
+		/// <summary> Control the scale of the U coordinates. </summary>
+		TT_SCALE_U		= 3,
+
+
+		/// <summary> Control the scale of the V coordinates. </summary>
+		TT_SCALE_V		= 4,
+	}
+
+	/// <summary> Describes the decay function of bomb forces. </summary>
+	public enum DecayType : uint
+	{
+		/// <summary> No decay. </summary>
+		DECAY_NONE			= 0,
+
+
+		/// <summary> Linear decay. </summary>
+		DECAY_LINEAR		= 1,
+
+
+		/// <summary> Exponential decay. </summary>
+		DECAY_EXPONENTIAL	= 2,
+	}
+
+	/// <summary> Describes the symmetry type of bomb forces. </summary>
+	public enum SymmetryType : uint
+	{
+		/// <summary> Spherical Symmetry. </summary>
+		SPHERICAL_SYMMETRY		= 0,
+
+
+		/// <summary> Cylindrical Symmetry. </summary>
+		CYLINDRICAL_SYMMETRY	= 1,
+
+
+		/// <summary> Planar Symmetry. </summary>
+		PLANAR_SYMMETRY			= 2,
+	}
+
+	/// <summary> Controls the way the a particle mesh emitter determines the starting speed and direction of the particles that are emitted. </summary>
+	public enum VelocityType : uint
+	{
+		/// <summary> Uses the normals of the meshes to determine staring velocity. </summary>
+		VELOCITY_USE_NORMALS	= 0,
+
+
+		/// <summary> Starts particles with a random velocity. </summary>
+		VELOCITY_USE_RANDOM		= 1,
+
+
+		/// <summary> Uses the emission axis to determine initial particle direction? </summary>
+		VELOCITY_USE_DIRECTION	= 2,
+	}
+
+	/// <summary> Controls which parts of the mesh that the particles are emitted from. </summary>
+	public enum EmitFrom : uint
+	{
+		/// <summary> Emit particles from the vertices of the mesh. </summary>
+		EMIT_FROM_VERTICES		= 0,
+
+
+		/// <summary> Emit particles from the center of the faces of the mesh. </summary>
+		EMIT_FROM_FACE_CENTER	= 1,
+
+
+		/// <summary> Emit particles from the center of the edges of the mesh. </summary>
+		EMIT_FROM_EDGE_CENTER	= 2,
+
+
+		/// <summary> Perhaps randomly emit particles from anywhere on the faces of the mesh? </summary>
+		EMIT_FROM_FACE_SURFACE	= 3,
+
+
+		/// <summary> Perhaps randomly emit particles from anywhere on the edges of the mesh? </summary>
+		EMIT_FROM_EDGE_SURFACE	= 4,
+	}
+
+	/// <summary> The type of information that is stored in a texture used by an NiTextureEffect. </summary>
+	public enum TextureType : uint
+	{
+		/// <summary> Apply a projected light texture. Each light effect is summed before multiplying by the base texture. </summary>
+		TEX_PROJECTED_LIGHT		= 0,
+
+
+		/// <summary> Apply a projected shadow texture. Each shadow effect is multiplied by the base texture. </summary>
+		TEX_PROJECTED_SHADOW	= 1,
+
+
+		/// <summary> Apply an environment map texture. Added to the base texture and light/shadow/decal maps. </summary>
+		TEX_ENVIRONMENT_MAP		= 2,
+
+
+		/// <summary> Apply a fog map texture. Alpha channel is used to blend the color channel with the base texture. </summary>
+		TEX_FOG_MAP				= 3,
+	}
+
+	/// <summary> Determines the way that UV texture coordinates are generated. </summary>
+	public enum CoordGenType : uint
+	{
+		/// <summary> Use planar mapping. </summary>
+		CG_WORLD_PARALLEL		= 0,
+
+
+		/// <summary> Use perspective mapping. </summary>
+		CG_WORLD_PERSPECTIVE	= 1,
+
+
+		/// <summary> Use spherical mapping. </summary>
+		CG_SPHERE_MAP			= 2,
+
+
+		/// <summary> Use specular cube mapping. For NiSourceCubeMap only. </summary>
+		CG_SPECULAR_CUBE_MAP	= 3,
+
+
+		/// <summary> Use diffuse cube mapping. For NiSourceCubeMap only. </summary>
+		CG_DIFFUSE_CUBE_MAP		= 4,
+	}
+
+	public enum EndianType : byte
+	{
+		/// <summary> The numbers are stored in big endian format, such as those used by PowerPC Mac processors. </summary>
+		ENDIAN_BIG		= 0,
+
+
+		/// <summary> The numbers are stored in little endian format, such as those used by Intel and AMD x86 processors. </summary>
+		ENDIAN_LITTLE	= 1,
+	}
+
+	/// <summary> Used by NiMaterialColorControllers to select which type of color in the controlled object that will be animated. </summary>
+	public enum MaterialColor : ushort
+	{
+		/// <summary> Control the ambient color. </summary>
+		TC_AMBIENT		= 0,
+
+
+		/// <summary> Control the diffuse color. </summary>
+		TC_DIFFUSE		= 1,
+
+
+		/// <summary> Control the specular color. </summary>
+		TC_SPECULAR		= 2,
+
+
+		/// <summary> Control the self illumination color. </summary>
+		TC_SELF_ILLUM	= 3,
+	}
+
+	/// <summary> Used by NiLightColorControllers to select which type of color in the controlled object that will be animated. </summary>
+	public enum LightColor : ushort
+	{
+		/// <summary> Control the diffuse color. </summary>
+		LC_DIFFUSE	= 0,
+
+
+		/// <summary> Control the ambient color. </summary>
+		LC_AMBIENT	= 1,
+	}
+
+	/// <summary> Used by NiGeometryData to control the volatility of the mesh. Consistency Type is masked to only the upper 4 bits (0xF000). Dirty mask is the lower 12 (0x0FFF) but only used at runtime. </summary>
+	public enum ConsistencyType : ushort
+	{
+		/// <summary> Mutable Mesh </summary>
+		CT_MUTABLE	= 0x0000,
+
+
+		/// <summary> Static Mesh </summary>
+		CT_STATIC	= 0x4000,
+
+
+		/// <summary> Volatile Mesh </summary>
+		CT_VOLATILE	= 0x8000,
+	}
+
+	/// <summary> Describes the way that NiSortAdjustNode modifies the sorting behavior for the subtree below it. </summary>
+	public enum SortingMode : uint
+	{
+		/// <summary> Inherit. Acts identical to NiNode. </summary>
+		SORTING_INHERIT	= 0,
+
+
+		/// <summary> Disables sort on all geometry under this node. </summary>
+		SORTING_OFF		= 1,
+	}
+
+	/// <summary> The propagation mode controls scene graph traversal during collision detection operations for NiCollisionData. </summary>
+	public enum PropagationMode : uint
+	{
+		/// <summary> Propagation only occurs as a result of a successful collision. </summary>
+		PROPAGATE_ON_SUCCESS	= 0,
+
+
+		/// <summary> (Deprecated) Propagation only occurs as a result of a failed collision. </summary>
+		PROPAGATE_ON_FAILURE	= 1,
+
+
+		/// <summary> Propagation always occurs regardless of collision result. </summary>
+		PROPAGATE_ALWAYS		= 2,
+
+
+		/// <summary> Propagation never occurs regardless of collision result. </summary>
+		PROPAGATE_NEVER			= 3,
+	}
+
+	/// <summary> The collision mode controls the type of collision operation that is to take place for NiCollisionData. </summary>
+	public enum CollisionMode : uint
+	{
+		/// <summary> Use Bounding Box </summary>
+		CM_USE_OBB		= 0,
+
+
+		/// <summary> Use Triangles </summary>
+		CM_USE_TRI		= 1,
+
+
+		/// <summary> Use Alternate Bounding Volumes </summary>
+		CM_USE_ABV		= 2,
+
+
+		/// <summary> Indicates that no collision test should be made. </summary>
+		CM_NOTEST		= 3,
+
+
+		/// <summary> Use NiBound </summary>
+		CM_USE_NIBOUND	= 4,
+	}
+
+	public enum BoundVolumeType : uint
+	{
+		/// <summary> Default </summary>
+		BASE_BV			= 0xffffffff,
+
+
+		/// <summary> Sphere </summary>
+		SPHERE_BV		= 0,
+
+
+		/// <summary> Box </summary>
+		BOX_BV			= 1,
+
+
+		/// <summary> Capsule </summary>
+		CAPSULE_BV		= 2,
+
+
+		/// <summary> Union </summary>
+		UNION_BV		= 4,
+
+
+		/// <summary> Half Space </summary>
+		HALFSPACE_BV	= 5,
+	}
+
+	/// <summary> Bethesda Havok. </summary>
+	public enum hkResponseType : byte
+	{
+		/// <summary> Invalid Response </summary>
+		RESPONSE_INVALID		= 0,
+
+
+		/// <summary> Do normal collision resolution </summary>
+		RESPONSE_SIMPLE_CONTACT	= 1,
+
+
+		/// <summary> No collision resolution is performed but listeners are called </summary>
+		RESPONSE_REPORTING		= 2,
+
+
+		/// <summary> Do nothing, ignore all the results. </summary>
+		RESPONSE_NONE			= 3,
+	}
+
+	/// <summary> Biped bodypart data used for visibility control of triangles. Options are Fallout 3, except where marked for Skyrim (uses SBP prefix) Skyrim BP names are listed only for vanilla names, different creatures have different defnitions for naming. </summary>
+	public enum BSDismemberBodyPartType : ushort
+	{
+		/// <summary> Torso </summary>
+		BP_TORSO										= 0,
+
+
+		/// <summary> Head </summary>
+		BP_HEAD											= 1,
+
+
+		/// <summary> Head 2 </summary>
+		BP_HEAD2										= 2,
+
+
+		/// <summary> Left Arm </summary>
+		BP_LEFTARM										= 3,
+
+
+		/// <summary> Left Arm 2 </summary>
+		BP_LEFTARM2										= 4,
+
+
+		/// <summary> Right Arm </summary>
+		BP_RIGHTARM										= 5,
+
+
+		/// <summary> Right Arm 2 </summary>
+		BP_RIGHTARM2									= 6,
+
+
+		/// <summary> Left Leg </summary>
+		BP_LEFTLEG										= 7,
+
+
+		/// <summary> Left Leg 2 </summary>
+		BP_LEFTLEG2										= 8,
+
+
+		/// <summary> Left Leg 3 </summary>
+		BP_LEFTLEG3										= 9,
+
+
+		/// <summary> Right Leg </summary>
+		BP_RIGHTLEG										= 10,
+
+
+		/// <summary> Right Leg 2 </summary>
+		BP_RIGHTLEG2									= 11,
+
+
+		/// <summary> Right Leg 3 </summary>
+		BP_RIGHTLEG3									= 12,
+
+
+		/// <summary> Brain </summary>
+		BP_BRAIN										= 13,
+
+
+		/// <summary> Skyrim, Head(Human), Body(Atronachs,Beasts), Mask(Dragonpriest) </summary>
+		SBP_30_HEAD										= 30,
+
+
+		/// <summary> Skyrim, Hair(human), Far(Dragon), Mask2(Dragonpriest),SkinnedFX(Spriggan) </summary>
+		SBP_31_HAIR										= 31,
+
+
+		/// <summary> Skyrim, Main body, extras(Spriggan) </summary>
+		SBP_32_BODY										= 32,
+
+
+		/// <summary> Skyrim, Hands L/R, BodyToo(Dragonpriest), Legs(Draugr), Arms(Giant) </summary>
+		SBP_33_HANDS									= 33,
+
+
+		/// <summary> Skyrim, Forearms L/R, Beard(Draugr) </summary>
+		SBP_34_FOREARMS									= 34,
+
+
+		/// <summary> Skyrim, Amulet </summary>
+		SBP_35_AMULET									= 35,
+
+
+		/// <summary> Skyrim, Ring </summary>
+		SBP_36_RING										= 36,
+
+
+		/// <summary> Skyrim, Feet L/R </summary>
+		SBP_37_FEET										= 37,
+
+
+		/// <summary> Skyrim, Calves L/R </summary>
+		SBP_38_CALVES									= 38,
+
+
+		/// <summary> Skyrim, Shield </summary>
+		SBP_39_SHIELD									= 39,
+
+
+		/// <summary> Skyrim, Tail(Argonian/Khajiit), Skeleton01(Dragon), FX01(AtronachStorm),FXMist (Dragonpriest), Spit(Chaurus,Spider),SmokeFins(IceWraith) </summary>
+		SBP_40_TAIL										= 40,
+
+
+		/// <summary> Skyrim, Long Hair(Human), Skeleton02(Dragon),FXParticles(Dragonpriest) </summary>
+		SBP_41_LONGHAIR									= 41,
+
+
+		/// <summary> Skyrim, Circlet(Human, MouthFireEffect(Dragon) </summary>
+		SBP_42_CIRCLET									= 42,
+
+
+		/// <summary> Skyrim, Ears </summary>
+		SBP_43_EARS										= 43,
+
+
+		/// <summary> Skyrim, Bloodied dragon head, or NPC face/mouth </summary>
+		SBP_44_DRAGON_BLOODHEAD_OR_MOD_MOUTH			= 44,
+
+
+		/// <summary> Skyrim, Left Bloodied dragon wing, Saddle(Horse), or NPC cape, scarf, shawl, neck-tie, etc. </summary>
+		SBP_45_DRAGON_BLOODWINGL_OR_MOD_NECK			= 45,
+
+
+		/// <summary> Skyrim, Right Bloodied dragon wing, or NPC chest primary or outergarment </summary>
+		SBP_46_DRAGON_BLOODWINGR_OR_MOD_CHEST_PRIMARY	= 46,
+
+
+		/// <summary> Skyrim, Bloodied dragon tail, or NPC backpack/wings/... </summary>
+		SBP_47_DRAGON_BLOODTAIL_OR_MOD_BACK				= 47,
+
+
+		/// <summary> Anything that does not fit in the list </summary>
+		SBP_48_MOD_MISC1								= 48,
+
+
+		/// <summary> Pelvis primary or outergarment </summary>
+		SBP_49_MOD_PELVIS_PRIMARY						= 49,
+
+
+		/// <summary> Skyrim, Decapitated Head </summary>
+		SBP_50_DECAPITATEDHEAD							= 50,
+
+
+		/// <summary> Skyrim, Decapitate, neck gore </summary>
+		SBP_51_DECAPITATE								= 51,
+
+
+		/// <summary> Pelvis secondary or undergarment </summary>
+		SBP_52_MOD_PELVIS_SECONDARY						= 52,
+
+
+		/// <summary> Leg primary or outergarment or right leg </summary>
+		SBP_53_MOD_LEG_RIGHT							= 53,
+
+
+		/// <summary> Leg secondary or undergarment or left leg </summary>
+		SBP_54_MOD_LEG_LEFT								= 54,
+
+
+		/// <summary> Face alternate or jewelry </summary>
+		SBP_55_MOD_FACE_JEWELRY							= 55,
+
+
+		/// <summary> Chest secondary or undergarment </summary>
+		SBP_56_MOD_CHEST_SECONDARY						= 56,
+
+
+		/// <summary> Shoulder </summary>
+		SBP_57_MOD_SHOULDER								= 57,
+
+
+		/// <summary> Arm secondary or undergarment or left arm </summary>
+		SBP_58_MOD_ARM_LEFT								= 58,
+
+
+		/// <summary> Arm primary or outergarment or right arm </summary>
+		SBP_59_MOD_ARM_RIGHT							= 59,
+
+
+		/// <summary> Anything that does not fit in the list </summary>
+		SBP_60_MOD_MISC2								= 60,
+
+
+		/// <summary> Skyrim, FX01(Humanoid) </summary>
+		SBP_61_FX01										= 61,
+
+
+		/// <summary> Section Cap | Head </summary>
+		BP_SECTIONCAP_HEAD								= 101,
+
+
+		/// <summary> Section Cap | Head 2 </summary>
+		BP_SECTIONCAP_HEAD2								= 102,
+
+
+		/// <summary> Section Cap | Left Arm </summary>
+		BP_SECTIONCAP_LEFTARM							= 103,
+
+
+		/// <summary> Section Cap | Left Arm 2 </summary>
+		BP_SECTIONCAP_LEFTARM2							= 104,
+
+
+		/// <summary> Section Cap | Right Arm </summary>
+		BP_SECTIONCAP_RIGHTARM							= 105,
+
+
+		/// <summary> Section Cap | Right Arm 2 </summary>
+		BP_SECTIONCAP_RIGHTARM2							= 106,
+
+
+		/// <summary> Section Cap | Left Leg </summary>
+		BP_SECTIONCAP_LEFTLEG							= 107,
+
+
+		/// <summary> Section Cap | Left Leg 2 </summary>
+		BP_SECTIONCAP_LEFTLEG2							= 108,
+
+
+		/// <summary> Section Cap | Left Leg 3 </summary>
+		BP_SECTIONCAP_LEFTLEG3							= 109,
+
+
+		/// <summary> Section Cap | Right Leg </summary>
+		BP_SECTIONCAP_RIGHTLEG							= 110,
+
+
+		/// <summary> Section Cap | Right Leg 2 </summary>
+		BP_SECTIONCAP_RIGHTLEG2							= 111,
+
+
+		/// <summary> Section Cap | Right Leg 3 </summary>
+		BP_SECTIONCAP_RIGHTLEG3							= 112,
+
+
+		/// <summary> Section Cap | Brain </summary>
+		BP_SECTIONCAP_BRAIN								= 113,
+
+
+		/// <summary> Skyrim, Head slot, use on full-face helmets </summary>
+		SBP_130_HEAD									= 130,
+
+
+		/// <summary> Skyrim, Hair slot 1, use on hoods </summary>
+		SBP_131_HAIR									= 131,
+
+
+		/// <summary> Skyrim, Hair slot 2, use for longer hair </summary>
+		SBP_141_LONGHAIR								= 141,
+
+
+		/// <summary> Skyrim, Circlet slot 1, use for circlets </summary>
+		SBP_142_CIRCLET									= 142,
+
+
+		/// <summary> Skyrim, Ear slot </summary>
+		SBP_143_EARS									= 143,
+
+
+		/// <summary> Skyrim, neck gore on head side </summary>
+		SBP_150_DECAPITATEDHEAD							= 150,
+
+
+		/// <summary> Torso Cap | Head </summary>
+		BP_TORSOCAP_HEAD								= 201,
+
+
+		/// <summary> Torso Cap | Head 2 </summary>
+		BP_TORSOCAP_HEAD2								= 202,
+
+
+		/// <summary> Torso Cap | Left Arm </summary>
+		BP_TORSOCAP_LEFTARM								= 203,
+
+
+		/// <summary> Torso Cap | Left Arm 2 </summary>
+		BP_TORSOCAP_LEFTARM2							= 204,
+
+
+		/// <summary> Torso Cap | Right Arm </summary>
+		BP_TORSOCAP_RIGHTARM							= 205,
+
+
+		/// <summary> Torso Cap | Right Arm 2 </summary>
+		BP_TORSOCAP_RIGHTARM2							= 206,
+
+
+		/// <summary> Torso Cap | Left Leg </summary>
+		BP_TORSOCAP_LEFTLEG								= 207,
+
+
+		/// <summary> Torso Cap | Left Leg 2 </summary>
+		BP_TORSOCAP_LEFTLEG2							= 208,
+
+
+		/// <summary> Torso Cap | Left Leg 3 </summary>
+		BP_TORSOCAP_LEFTLEG3							= 209,
+
+
+		/// <summary> Torso Cap | Right Leg </summary>
+		BP_TORSOCAP_RIGHTLEG							= 210,
+
+
+		/// <summary> Torso Cap | Right Leg 2 </summary>
+		BP_TORSOCAP_RIGHTLEG2							= 211,
+
+
+		/// <summary> Torso Cap | Right Leg 3 </summary>
+		BP_TORSOCAP_RIGHTLEG3							= 212,
+
+
+		/// <summary> Torso Cap | Brain </summary>
+		BP_TORSOCAP_BRAIN								= 213,
+
+
+		/// <summary> Skyrim, Head slot, use for neck on character head </summary>
+		SBP_230_HEAD									= 230,
+
+
+		/// <summary> Torso Section | Head </summary>
+		BP_TORSOSECTION_HEAD							= 1000,
+
+
+		/// <summary> Torso Section | Head 2 </summary>
+		BP_TORSOSECTION_HEAD2							= 2000,
+
+
+		/// <summary> Torso Section | Left Arm </summary>
+		BP_TORSOSECTION_LEFTARM							= 3000,
+
+
+		/// <summary> Torso Section | Left Arm 2 </summary>
+		BP_TORSOSECTION_LEFTARM2						= 4000,
+
+
+		/// <summary> Torso Section | Right Arm </summary>
+		BP_TORSOSECTION_RIGHTARM						= 5000,
+
+
+		/// <summary> Torso Section | Right Arm 2 </summary>
+		BP_TORSOSECTION_RIGHTARM2						= 6000,
+
+
+		/// <summary> Torso Section | Left Leg </summary>
+		BP_TORSOSECTION_LEFTLEG							= 7000,
+
+
+		/// <summary> Torso Section | Left Leg 2 </summary>
+		BP_TORSOSECTION_LEFTLEG2						= 8000,
+
+
+		/// <summary> Torso Section | Left Leg 3 </summary>
+		BP_TORSOSECTION_LEFTLEG3						= 9000,
+
+
+		/// <summary> Torso Section | Right Leg </summary>
+		BP_TORSOSECTION_RIGHTLEG						= 10000,
+
+
+		/// <summary> Torso Section | Right Leg 2 </summary>
+		BP_TORSOSECTION_RIGHTLEG2						= 11000,
+
+
+		/// <summary> Torso Section | Right Leg 3 </summary>
+		BP_TORSOSECTION_RIGHTLEG3						= 12000,
+
+
+		/// <summary> Torso Section | Brain </summary>
+		BP_TORSOSECTION_BRAIN							= 13000,
+	}
+
+	/// <summary> Values for configuring the shader type in a BSLightingShaderProperty </summary>
+	public enum BSLightingShaderPropertyShaderType : uint
+	{
+		Default								= 0,
+
+
+		/// <summary> Enables EnvMap Mask(TS6), EnvMap Scale </summary>
+		Environment Map						= 1,
+
+
+		/// <summary> Enables Glow(TS3) </summary>
+		Glow Shader							= 2,
+
+
+		/// <summary> Enables Height(TS4) </summary>
+		Parallax							= 3,
+
+
+		/// <summary> Enables Detail(TS4), Tint(TS7) </summary>
+		Face Tint							= 4,
+
+
+		/// <summary> Enables Skin Tint Color </summary>
+		Skin Tint							= 5,
+
+
+		/// <summary> Enables Hair Tint Color </summary>
+		Hair Tint							= 6,
+
+
+		/// <summary> Enables Height(TS4), Max Passes, Scale. Unimplemented. </summary>
+		Parallax Occ						= 7,
+
+		Multitexture Landscape				= 8,
+
+		LOD Landscape						= 9,
+
+		Snow								= 10,
+
+
+		/// <summary> Enables EnvMap Mask(TS6), Layer(TS7), Parallax Layer Thickness, Parallax Refraction Scale, Parallax Inner Layer U Scale, Parallax Inner Layer V Scale, EnvMap Scale </summary>
+		MultiLayer Parallax					= 11,
+
+		Tree Anim							= 12,
+
+		LOD Objects							= 13,
+
+
+		/// <summary> Enables SparkleParams </summary>
+		Sparkle Snow						= 14,
+
+		LOD Objects HD						= 15,
+
+
+		/// <summary> Enables EnvMap Mask(TS6), Eye EnvMap Scale </summary>
+		Eye Envmap							= 16,
+
+		Cloud								= 17,
+
+		LOD Landscape Noise					= 18,
+
+		Multitexture Landscape LOD Blend	= 19,
+
+		FO4 Dismemberment					= 20,
+	}
+
+	/// <summary> An unsigned 32-bit integer, describing which float variable in BSEffectShaderProperty to animate. </summary>
+	public enum EffectShaderControlledVariable : uint
+	{
+		/// <summary> EmissiveMultiple. </summary>
+		EmissiveMultiple		= 0,
+
+
+		/// <summary> Falloff Start Angle (degrees). </summary>
+		Falloff Start Angle		= 1,
+
+
+		/// <summary> Falloff Stop Angle (degrees). </summary>
+		Falloff Stop Angle		= 2,
+
+
+		/// <summary> Falloff Start Opacity. </summary>
+		Falloff Start Opacity	= 3,
+
+
+		/// <summary> Falloff Stop Opacity. </summary>
+		Falloff Stop Opacity	= 4,
+
+
+		/// <summary> Alpha Transparency (Emissive alpha?). </summary>
+		Alpha Transparency		= 5,
+
+
+		/// <summary> U Offset. </summary>
+		U Offset				= 6,
+
+
+		/// <summary> U Scale. </summary>
+		U Scale					= 7,
+
+
+		/// <summary> V Offset. </summary>
+		V Offset				= 8,
+
+
+		/// <summary> V Scale. </summary>
+		V Scale					= 9,
+	}
+
+	/// <summary> An unsigned 32-bit integer, describing which color in BSEffectShaderProperty to animate. </summary>
+	public enum EffectShaderControlledColor : uint
+	{
+		/// <summary> Emissive Color. </summary>
+		Emissive Color	= 0,
+	}
+
+	/// <summary> An unsigned 32-bit integer, describing which float variable in BSLightingShaderProperty to animate. </summary>
+	public enum LightingShaderControlledVariable : uint
+	{
+		/// <summary> The amount of distortion. </summary>
+		Refraction Strength		= 0,
+
+
+		/// <summary> Environment Map Scale. </summary>
+		Environment Map Scale	= 8,
+
+
+		/// <summary> Glossiness. </summary>
+		Glossiness				= 9,
+
+
+		/// <summary> Specular Strength. </summary>
+		Specular Strength		= 10,
+
+
+		/// <summary> Emissive Multiple. </summary>
+		Emissive Multiple		= 11,
+
+
+		/// <summary> Alpha. </summary>
+		Alpha					= 12,
+
+
+		/// <summary> U Offset. </summary>
+		U Offset				= 20,
+
+
+		/// <summary> U Scale. </summary>
+		U Scale					= 21,
+
+
+		/// <summary> V Offset. </summary>
+		V Offset				= 22,
+
+
+		/// <summary> V Scale. </summary>
+		V Scale					= 23,
+	}
+
+	/// <summary> An unsigned 32-bit integer, describing which color in BSLightingShaderProperty to animate. </summary>
+	public enum LightingShaderControlledColor : uint
+	{
+		/// <summary> Specular Color. </summary>
+		Specular Color	= 0,
+
+
+		/// <summary> Emissive Color. </summary>
+		Emissive Color	= 1,
+	}
+
+	/// <summary> Bethesda Havok. Describes the type of bhkConstraint. </summary>
+	public enum hkConstraintType : uint
+	{
+		/// <summary> A ball and socket constraint. </summary>
+		BallAndSocket	= 0,
+
+
+		/// <summary> A hinge constraint. </summary>
+		Hinge			= 1,
+
+
+		/// <summary> A limited hinge constraint. </summary>
+		Limited Hinge	= 2,
+
+
+		/// <summary> A prismatic constraint. </summary>
+		Prismatic		= 6,
+
+
+		/// <summary> A ragdoll constraint. </summary>
+		Ragdoll			= 7,
+
+
+		/// <summary> A stiff spring constraint. </summary>
+		StiffSpring		= 8,
+
+
+		/// <summary> A malleable constraint. </summary>
+		Malleable		= 13,
+	}
+
+	/// <summary> Describes the order of scaling and rotation matrices. Translate, Scale, Rotation, Center are from TexDesc. Back = inverse of Center. FromMaya = inverse of the V axis with a positive translation along V of 1 unit. </summary>
+	public enum TransformMethod : uint
+	{
+		/// <summary> Center * Rotation * Back * Translate * Scale </summary>
+		Maya Deprecated	= 0,
+
+
+		/// <summary> Center * Scale * Rotation * Translate * Back </summary>
+		Max				= 1,
+
+
+		/// <summary> Center * Rotation * Back * FromMaya * Translate * Scale </summary>
+		Maya			= 2,
+	}
+
+	/// <summary> Bethesda Animation. Animation type used on this position. This specifies the function of this position. </summary>
+	public enum AnimationType : ushort
+	{
+		/// <summary> Actor use sit animation. </summary>
+		Sit		= 1,
+
+
+		/// <summary> Actor use sleep animation. </summary>
+		Sleep	= 2,
+
+
+		/// <summary> Used for lean animations? </summary>
+		Lean	= 4,
+	}
+
+	public enum MotorType : byte
+	{
+		MOTOR_NONE		= 0,
+
+		MOTOR_POSITION	= 1,
+
+		MOTOR_VELOCITY	= 2,
+
+		MOTOR_SPRING	= 3,
+	}
+
+	/// <summary> Determines how the raw image data is stored in NiRawImageData. </summary>
+	public enum ImageType : uint
+	{
+		/// <summary> Colors store red, blue, and green components. </summary>
+		RGB		= 1,
+
+
+		/// <summary> Colors store red, blue, green, and alpha components. </summary>
+		RGBA	= 2,
+	}
+
+	public enum BroadPhaseType : byte
+	{
+		BROAD_PHASE_INVALID	= 0,
+
+		BROAD_PHASE_ENTITY	= 1,
+
+		BROAD_PHASE_PHANTOM	= 2,
+
+		BROAD_PHASE_BORDER	= 3,
+	}
+
+	public enum InterpBlendFlags : byte
+	{
+		/// <summary> MANAGER_CONTROLLED </summary>
+		MANAGER_CONTROLLED	= 1,
+	}
+
+	public enum NxJointType : uint
+	{
+		NX_JOINT_PRISMATIC		= 0,
+
+		NX_JOINT_REVOLUTE		= 1,
+
+		NX_JOINT_CYLINDRICAL	= 2,
+
+		NX_JOINT_SPHERICAL		= 3,
+
+		NX_JOINT_POINT_ON_LINE	= 4,
+
+		NX_JOINT_POINT_IN_PLANE	= 5,
+
+		NX_JOINT_DISTANCE		= 6,
+
+		NX_JOINT_PULLEY			= 7,
+
+		NX_JOINT_FIXED			= 8,
+
+		NX_JOINT_D6				= 9,
+	}
+
+	public enum NxD6JointMotion : uint
+	{
+		NX_D6JOINT_MOTION_LOCKED	= 0,
+
+		NX_D6JOINT_MOTION_LIMITED	= 1,
+
+		NX_D6JOINT_MOTION_FREE		= 2,
+	}
+
+	public enum NxD6JointDriveType : uint
+	{
+		NX_D6JOINT_DRIVE_POSITION	= 1,
+
+		NX_D6JOINT_DRIVE_VELOCITY	= 2,
+	}
+
+	public enum NxJointProjectionMode : uint
+	{
+		NX_JPM_NONE				= 0,
+
+		NX_JPM_POINT_MINDIST	= 1,
+
+		NX_JPM_LINEAR_MINDIST	= 2,
+	}
+
+	public enum NxShapeType : uint
+	{
+		NX_SHAPE_PLANE			= 0,
+
+		NX_SHAPE_SPHERE			= 1,
+
+		NX_SHAPE_BOX			= 2,
+
+		NX_SHAPE_CAPSULE		= 3,
+
+		NX_SHAPE_WHEEL			= 4,
+
+		NX_SHAPE_CONVEX			= 5,
+
+		NX_SHAPE_MESH			= 6,
+
+		NX_SHAPE_HEIGHTFIELD	= 7,
+
+		NX_SHAPE_RAW_MESH		= 8,
+
+		NX_SHAPE_COMPOUND		= 9,
+	}
+
+	public enum NxCombineMode : uint
+	{
+		NX_CM_AVERAGE	= 0,
+
+		NX_CM_MIN		= 1,
+
+		NX_CM_MULTIPLY	= 2,
+
+		NX_CM_MAX		= 3,
+	}
+
+	/// <summary> The type of animation interpolation (blending) that will be used on the associated key frames. </summary>
+	public enum BSShaderType : uint
+	{
+		/// <summary> Tall Grass Shader </summary>
+		SHADER_TALL_GRASS	= 0,
+
+
+		/// <summary> Standard Lighting Shader </summary>
+		SHADER_DEFAULT		= 1,
+
+
+		/// <summary> Sky Shader </summary>
+		SHADER_SKY			= 10,
+
+
+		/// <summary> Skin Shader </summary>
+		SHADER_SKIN			= 14,
+
+
+		/// <summary> Water Shader </summary>
+		SHADER_WATER		= 17,
+
+
+		/// <summary> Lighting 3.0 Shader </summary>
+		SHADER_LIGHTING30	= 29,
+
+
+		/// <summary> Tiled Shader </summary>
+		SHADER_TILE			= 32,
+
+
+		/// <summary> No Lighting Shader </summary>
+		SHADER_NOLIGHTING	= 33,
+	}
+
+	/// <summary> Sets what sky function this object fulfills in BSSkyShaderProperty or SkyShaderProperty. </summary>
+	public enum SkyObjectType : uint
+	{
+		/// <summary> BSSM_Sky_Texture </summary>
+		BSSM_SKY_TEXTURE			= 0,
+
+
+		/// <summary> BSSM_Sky_Sunglare </summary>
+		BSSM_SKY_SUNGLARE			= 1,
+
+
+		/// <summary> BSSM_Sky </summary>
+		BSSM_SKY					= 2,
+
+
+		/// <summary> BSSM_Sky_Clouds </summary>
+		BSSM_SKY_CLOUDS				= 3,
+
+
+		/// <summary> BSSM_Sky_Stars </summary>
+		BSSM_SKY_STARS				= 5,
+
+
+		/// <summary> BSSM_Sky_Moon_Stars_Mask </summary>
+		BSSM_SKY_MOON_STARS_MASK	= 7,
+	}
+
+	/// <summary> Anim note types. </summary>
+	public enum AnimNoteType : uint
+	{
+		/// <summary> ANT_INVALID </summary>
+		ANT_INVALID	= 0,
+
+
+		/// <summary> ANT_GRABIK </summary>
+		ANT_GRABIK	= 1,
+
+
+		/// <summary> ANT_LOOKIK </summary>
+		ANT_LOOKIK	= 2,
+	}
+
+	/// <summary> Culling modes for multi bound nodes. </summary>
+	public enum BSCPCullingType : uint
+	{
+		/// <summary> Normal </summary>
+		BSCP_CULL_NORMAL					= 0,
+
+
+		/// <summary> All Pass </summary>
+		BSCP_CULL_ALLPASS					= 1,
+
+
+		/// <summary> All Fail </summary>
+		BSCP_CULL_ALLFAIL					= 2,
+
+
+		/// <summary> Ignore Multi Bounds </summary>
+		BSCP_CULL_IGNOREMULTIBOUNDS			= 3,
+
+
+		/// <summary> Force Multi Bounds No Update </summary>
+		BSCP_CULL_FORCEMULTIBOUNDSNOUPDATE	= 4,
+	}
+
+	/// <summary> Sets how objects are to be cloned. </summary>
+	public enum CloningBehavior : uint
+	{
+		/// <summary> Share this object pointer with the newly cloned scene. </summary>
+		CLONING_SHARE		= 0,
+
+
+		/// <summary> Create an exact duplicate of this object for use with the newly cloned scene. </summary>
+		CLONING_COPY		= 1,
+
+
+		/// <summary> Create a copy of this object for use with the newly cloned stream, leaving some of the data to be written later. </summary>
+		CLONING_BLANK_COPY	= 2,
+	}
+
+	/// <summary> The data format of components. </summary>
+	public enum ComponentFormat : uint
+	{
+		/// <summary> Unknown, or don't care, format. </summary>
+		F_UNKNOWN				= 0x00000000,
+
+		F_INT8_1				= 0x00010101,
+
+		F_INT8_2				= 0x00020102,
+
+		F_INT8_3				= 0x00030103,
+
+		F_INT8_4				= 0x00040104,
+
+		F_UINT8_1				= 0x00010105,
+
+		F_UINT8_2				= 0x00020106,
+
+		F_UINT8_3				= 0x00030107,
+
+		F_UINT8_4				= 0x00040108,
+
+		F_NORMINT8_1			= 0x00010109,
+
+		F_NORMINT8_2			= 0x0002010A,
+
+		F_NORMINT8_3			= 0x0003010B,
+
+		F_NORMINT8_4			= 0x0004010C,
+
+		F_NORMUINT8_1			= 0x0001010D,
+
+		F_NORMUINT8_2			= 0x0002010E,
+
+		F_NORMUINT8_3			= 0x0003010F,
+
+		F_NORMUINT8_4			= 0x00040110,
+
+		F_INT16_1				= 0x00010211,
+
+		F_INT16_2				= 0x00020212,
+
+		F_INT16_3				= 0x00030213,
+
+		F_INT16_4				= 0x00040214,
+
+		F_UINT16_1				= 0x00010215,
+
+		F_UINT16_2				= 0x00020216,
+
+		F_UINT16_3				= 0x00030217,
+
+		F_UINT16_4				= 0x00040218,
+
+		F_NORMINT16_1			= 0x00010219,
+
+		F_NORMINT16_2			= 0x0002021A,
+
+		F_NORMINT16_3			= 0x0003021B,
+
+		F_NORMINT16_4			= 0x0004021C,
+
+		F_NORMUINT16_1			= 0x0001021D,
+
+		F_NORMUINT16_2			= 0x0002021E,
+
+		F_NORMUINT16_3			= 0x0003021F,
+
+		F_NORMUINT16_4			= 0x00040220,
+
+		F_INT32_1				= 0x00010421,
+
+		F_INT32_2				= 0x00020422,
+
+		F_INT32_3				= 0x00030423,
+
+		F_INT32_4				= 0x00040424,
+
+		F_UINT32_1				= 0x00010425,
+
+		F_UINT32_2				= 0x00020426,
+
+		F_UINT32_3				= 0x00030427,
+
+		F_UINT32_4				= 0x00040428,
+
+		F_NORMINT32_1			= 0x00010429,
+
+		F_NORMINT32_2			= 0x0002042A,
+
+		F_NORMINT32_3			= 0x0003042B,
+
+		F_NORMINT32_4			= 0x0004042C,
+
+		F_NORMUINT32_1			= 0x0001042D,
+
+		F_NORMUINT32_2			= 0x0002042E,
+
+		F_NORMUINT32_3			= 0x0003042F,
+
+		F_NORMUINT32_4			= 0x00040430,
+
+		F_FLOAT16_1				= 0x00010231,
+
+		F_FLOAT16_2				= 0x00020232,
+
+		F_FLOAT16_3				= 0x00030233,
+
+		F_FLOAT16_4				= 0x00040234,
+
+		F_FLOAT32_1				= 0x00010435,
+
+		F_FLOAT32_2				= 0x00020436,
+
+		F_FLOAT32_3				= 0x00030437,
+
+		F_FLOAT32_4				= 0x00040438,
+
+		F_UINT_10_10_10_L1		= 0x00010439,
+
+		F_NORMINT_10_10_10_L1	= 0x0001043A,
+
+		F_NORMINT_11_11_10		= 0x0001043B,
+
+		F_NORMUINT8_4_BGRA		= 0x0004013C,
+
+		F_NORMINT_10_10_10_2	= 0x0001043D,
+
+		F_UINT_10_10_10_2		= 0x0001043E,
+	}
+
+	/// <summary> Determines how a data stream is used? </summary>
+	public enum DataStreamUsage : uint
+	{
+		USAGE_VERTEX_INDEX		= 0,
+
+		USAGE_VERTEX			= 1,
+
+		USAGE_SHADER_CONSTANT	= 2,
+
+		USAGE_USER				= 3,
+	}
+
+	/// <summary> Describes the type of primitives stored in a mesh object. </summary>
+	public enum MeshPrimitiveType : uint
+	{
+		/// <summary> Triangle primitive type. </summary>
+		MESH_PRIMITIVE_TRIANGLES	= 0,
+
+
+		/// <summary> Triangle strip primitive type. </summary>
+		MESH_PRIMITIVE_TRISTRIPS	= 1,
+
+
+		/// <summary> Lines primitive type. </summary>
+		MESH_PRIMITIVE_LINES		= 2,
+
+
+		/// <summary> Line strip primitive type. </summary>
+		MESH_PRIMITIVE_LINESTRIPS	= 3,
+
+
+		/// <summary> Quadrilateral primitive type. </summary>
+		MESH_PRIMITIVE_QUADS		= 4,
+
+
+		/// <summary> Point primitive type. </summary>
+		MESH_PRIMITIVE_POINTS		= 5,
+	}
+
+	/// <summary> A sync point corresponds to a particular stage in per-frame processing. </summary>
+	public enum SyncPoint : ushort
+	{
+		/// <summary> Synchronize for any sync points that the modifier supports. </summary>
+		SYNC_ANY				= 0x8000,
+
+
+		/// <summary> Synchronize when an object is updated. </summary>
+		SYNC_UPDATE				= 0x8010,
+
+
+		/// <summary> Synchronize when an entire scene graph has been updated. </summary>
+		SYNC_POST_UPDATE		= 0x8020,
+
+
+		/// <summary> Synchronize when an object is determined to be potentially visible. </summary>
+		SYNC_VISIBLE			= 0x8030,
+
+
+		/// <summary> Synchronize when an object is rendered. </summary>
+		SYNC_RENDER				= 0x8040,
+
+
+		/// <summary> Synchronize when a physics simulation step is about to begin. </summary>
+		SYNC_PHYSICS_SIMULATE	= 0x8050,
+
+
+		/// <summary> Synchronize when a physics simulation step has produced results. </summary>
+		SYNC_PHYSICS_COMPLETED	= 0x8060,
+
+
+		/// <summary> Synchronize after all data necessary to calculate reflections is ready. </summary>
+		SYNC_REFLECTIONS		= 0x8070,
+	}
+
+	/// <summary> Describes the various methods that may be used to specify the orientation of the particles. </summary>
+	public enum AlignMethod : uint
+	{
+		ALIGN_INVALID			= 0,
+
+		ALIGN_PER_PARTICLE		= 1,
+
+		ALIGN_LOCAL_FIXED		= 2,
+
+		ALIGN_LOCAL_POSITION	= 5,
+
+		ALIGN_LOCAL_VELOCITY	= 9,
+
+		ALIGN_CAMERA			= 16,
+	}
+
+	public enum PSLoopBehavior : uint
+	{
+		/// <summary> Key times map such that the first key occurs at the birth of the particle, and times later than the last key get the last key value. </summary>
+		PS_LOOP_CLAMP_BIRTH	= 0,
+
+
+		/// <summary> Key times map such that the last key occurs at the death of the particle, and times before the initial key time get the value of the initial key. </summary>
+		PS_LOOP_CLAMP_DEATH	= 1,
+
+
+		/// <summary> Scale the animation to fit the particle lifetime, so that the first key is age zero, and the last key comes at the particle death. </summary>
+		PS_LOOP_AGESCALE	= 2,
+
+
+		/// <summary> The time is converted to one within the time range represented by the keys, as if the key sequence loops forever in the past and future. </summary>
+		PS_LOOP_LOOP		= 3,
+
+
+		/// <summary> The time is reflection looped, as if the keys played forward then backward the forward then backward etc for all time. </summary>
+		PS_LOOP_REFLECT		= 4,
+	}
+
+	/// <summary> This is used by the Floodgate kernel to determine which NiPSForceHelpers functions to call. </summary>
+	public enum PSForceType : uint
+	{
+		FORCE_BOMB				= 0,
+
+		FORCE_DRAG				= 1,
+
+		FORCE_AIR_FIELD			= 2,
+
+		FORCE_DRAG_FIELD		= 3,
+
+		FORCE_GRAVITY_FIELD		= 4,
+
+		FORCE_RADIAL_FIELD		= 5,
+
+		FORCE_TURBULENCE_FIELD	= 6,
+
+		FORCE_VORTEX_FIELD		= 7,
+
+		FORCE_GRAVITY			= 8,
+	}
+
+	/// <summary> This is used by the Floodgate kernel to determine which NiPSColliderHelpers functions to call. </summary>
+	public enum ColliderType : uint
+	{
+		COLLIDER_PLANAR		= 0,
+
+		COLLIDER_SPHERICAL	= 1,
+	}

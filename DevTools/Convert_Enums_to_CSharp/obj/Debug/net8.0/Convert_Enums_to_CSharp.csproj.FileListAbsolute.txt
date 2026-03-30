@@ -1,0 +1,15 @@
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\bin\Debug\net8.0\Convert_Enums_to_CSharp.exe
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\bin\Debug\net8.0\Convert_Enums_to_CSharp.deps.json
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\bin\Debug\net8.0\Convert_Enums_to_CSharp.runtimeconfig.json
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\bin\Debug\net8.0\Convert_Enums_to_CSharp.dll
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\bin\Debug\net8.0\Convert_Enums_to_CSharp.pdb
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.AssemblyInfoInputs.cache
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.AssemblyInfo.cs
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.csproj.CoreCompileInputs.cache
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.sourcelink.json
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.dll
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\refint\Convert_Enums_to_CSharp.dll
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.pdb
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\Convert_Enums_to_CSharp.genruntimeconfig.cache
+E:\Projects\My_Repos\Nif-CSharp_Lib\Dev_Tools\Convert_Enums_to_CSharp\obj\Debug\net8.0\ref\Convert_Enums_to_CSharp.dll
